@@ -1,0 +1,58 @@
+<!--  View for the dashboard of the site  -->
+<div class="container-fluid new-section" ng-init="dashboard.getValidatorInfo()">
+     
+	<div class="row">
+       	
+       	<div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
+       		
+       		<h1>Dashboard</h1>
+     		<br>
+			<div class="panel panel-default">
+			    <div class="panel-heading"><strong>Validator Details</strong></div>
+			    <div class="panel-body text-data"><span class="title">Address:</span> {{dashboard.address}}</div>
+			    <div class="panel-body"><span class="title">Balance:</span> {{dashboard.totalBalance}} ZCH</div>
+			    <div class="panel-body"><span class="title">Staked Percent:</span> {{dashboard.stakedPercent}} %</div>
+			    <div class="panel-body"><span class="title">ZCH Earned:</span>{{dashboard.zchEarned}} ZCH</div>
+			    <div class="panel-body"><span class="title">Blocks Forged: </span>{{dashboard.blocksForged}}</div>
+			  </div>
+
+
+			  <form name="getzecash" method="post">
+				    <div class="form-group">
+				      <label for="amount">Amount:</label>
+				      <input type="number" class="form-control input-lg" ng-model="dashboard.amount" min = "{{dashboard.minValue}}" max = "{{dashboard.maxValue}}" id="amount" name="amount" required>
+				      <div ng-messages="getzecash.amount.$error" ng-show="getzecash.amount.$touched && getzecash.amount.$invalid" class="ang-messages">
+						<div ng-message="required">Please enter required amount</div>
+						<div ng-message="min">Please enter amount more than 1000</div>
+						<div ng-message="max">Please enter amount less than 100000</div>
+					</div>
+				    </div>
+				    <br>
+				    <div class="form-group">
+				    
+				    <button type="submit" class="btn-lg zecash-btn" data-ng-click="dashboard.getZecashAmount()" ng-disabled="getzecash.$invalid">Get ZeCash</button>
+
+				    <a class="btn-lg validator-btn" ui-sref="validator" id="validator1">See ZeCash in Action</a>
+
+				   <!-- <div><a class="btn-lg validator-btn large-screen-hide" ui-sref="validator" id="validator2">See ZeCash in Action</a></div>-->
+				    
+				</div>
+
+ 			 </form>
+			 
+			
+	       
+
+			
+			<br>
+			<br>
+			<!--<div class="jumbotron">
+			  <h2><strong>Recently Minted Blocks</strong></h2>    
+			  <br>  
+			  <p>You have not minted any blocks yet.</p>
+			</div>-->
+	    </div>
+	        
+    </div>
+      
+</div>

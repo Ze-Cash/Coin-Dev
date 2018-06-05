@@ -1,0 +1,56 @@
+<!--  View showing all the validators  -->
+<div class="container-fluid  validator-section" ng-init="validator.showValidators();validator.getValidator();">
+     
+	<div class="row">
+       	
+       	<div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
+       		
+       		<h1>All Validators</h1>
+       		<br>
+       		<div class="currentval-font text-data" ng-if="validator.currentVal"><span class="title">Current Validator:</span> {{validator.currentVal}}</div>
+     		<br>
+	        <md-card>
+			  <md-card-content>
+			   <div class="text-left you-font"><b>You</b></div>
+
+			   <div class="text-data big-font"><span class="title">Address:</span> {{validator.address}}</div> 
+			    <p class="big-font"><span class="title">ZeCash Staked:</span> {{validator.totalBalance}}</p> 
+			    <p class="big-font"><span class="title">Staking Weight:</span> {{validator.stakedPercent}}</p> 
+			    <p class="big-font"><span class="title">Blocks Validated:</span> {{validator.blocksForged}}</p> 
+			 </md-card-content>
+			 
+			</md-card>
+			<br>
+			
+			 <button class="btn-lg zecash-btn" ng-if="validator.address == validator.currentVal && validator.isVisible" type="submit" 
+            data-ng-click="validator.forgeBlock()">Validate Block</button>
+			<br>
+			
+			<div class="success-font" ng-if="validator.isDisabled">Block is getting validated.......</div>
+			<div class="success-font" ng-if="validator.isUpdated">Block is validated!!!</div>
+			<br>
+			<br>
+			<h2 style="text-align: center">Other Validators</h2>
+
+		
+			<md-content class="md-padding" layout-wrap layout-xs="column" layout="row">
+   			 <div ng-repeat="eachVal in validator.otherValidators" flex-xs flex-gt-xs="50" layout="column">
+				<md-card>
+				  <md-card-content>
+				   <div class="text-left big-font"><b>Validator {{$index+1}}</b></div>
+				   <div class="text-data"><span class="title">Address:</span> {{eachVal[3]}}</div> 
+				    <p><span class="title">ZeCash Staked:</span> {{eachVal[0]}}</p> 
+				    <p><span class="title">Staking Weight:</span> {{eachVal[1]/10}}%</p> 
+				    <p><span class="title">Blocks Validated:</span> {{eachVal[5]}}</p> 
+				 </md-card-content>
+				 
+				</md-card>
+			</div>
+
+	</md-content>
+
+	    </div>
+	        
+    </div>
+      
+</div>

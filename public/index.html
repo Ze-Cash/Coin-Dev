@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="posApp">
+
+<head>
+	  
+    <title>Ze-Cash: POC for Proof Of Stake</title>
+
+    <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   
+   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ 	  <meta name="Description" content="Official Beta |Zecash| Secure / Anonym / Fast processing / Full POS">
+    
+    <link rel="icon" href="https://ze.cash/assets/imgs/logo.png" type="image/x-icon"/>
+    
+    <link rel="shortcut icon" href="https://ze.cash/assets/imgs/logo.png" type="image/x-icon"/>
+
+ 	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	  <link rel="stylesheet" href="/css/style.css">
+
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Passion+One:400,700' rel='stylesheet' type='text/css'>
+  	<link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,300italic' rel='stylesheet' type='text/css'>
+     <!-- AngularJS Material CSS now available via Google CDN; version 1.1.9 used here -->
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css">
+
+</head>
+
+<body>
+
+    <div ng-controller="dashboardController as dashboard" ng-if="location.path() !== '/users'" id="nav-parent" ng-cloak>
+    
+        <nav class="navbar navbar-default navbar-fixed-top">
+          
+          <div class="container-fluid">
+
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                
+                </button>
+                
+                <a ui-sref="home" class="navbar-brand"><b>Ze.Cash</b></a>
+
+            </div>   <!--navbar header -->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
+                
+                <ul class="nav navbar-nav navbar-right">
+               
+                    <li><a ui-sref="instructions" ng-show = "dashboard.address != ''" id="instruction">Instructions</a></li>
+                    
+                    <li><a class="active" ng-show = "dashboard.address != ''" ui-sref="dashboard" id="dashboard">Dashboard</a></li>
+                    <li><a ui-sref="validator" ng-show = "dashboard.address != ''" id="validator">All Validators</a></li>
+
+                </ul>
+            
+            </div>
+          
+          </div>
+
+        </nav>
+    
+    </div>
+
+    <div class="view-section" ui-view></div>
+
+    <div ng-controller="footerController as myFooter" ng-show="myFooter.footerLoaded" ng-if="location.path() !== '/users'" ng-cloak>
+
+        <footer class="copyright-area xs-center">
+        
+           
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 footer-text">
+                        <p>&copy;Zecash Limited 2018. All rights reserved.</p>
+                         Kemp House, 160 City Road<br>
+                        London EC1V 2NX<br>
+                        United Kingdom<br> 
+                        Registered #11184882<br> 
+                    </div>
+                   <div class="col-sm-6 text-right">
+                        <ul class="social-links">
+                            <li><a href="assets/docs/Zecash_Terms.pdf" target="_blank"><i class="fa fa-pencil-square-o"> Terms and Conditions</i></a></li>  <br> 
+                            <li><a href="assets/docs/Zecash_Whitepaper.pdf" target="_blank"><i class="fa fa-file-pdf-o"> WhitePaper</i></a></li>   <br> 
+                            <li><a href="mailto:info@ze.cash"><i class="fa fa-envelope-o"> Contact</i></a></li> <br> 
+                            <li><a href="https://clearify.io" target="_blank"><img src="img/clearify-Badge-Light.png"></i></a></li>   <br>             
+                        </ul>
+                    </div>   
+                </div>
+            </div>
+        
+        
+        </footer>
+    
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+   
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-messages.min.js"></script>
+
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.js"></script>
+
+    <script type="text/javascript" src="js/app.js"></script>
+
+    <script type="text/javascript" src="js/app-routes.js"></script>
+
+    <script type="text/javascript" src="js/services/dashboardService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/dashboardController.js"></script>
+
+    <script type="text/javascript" src="js/services/validatorService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/validatorController.js"></script>
+
+    <script type="text/javascript" src="js/controllers/footerController.js"></script>
+    
+    <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.4 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.js"></script>
+  
+</script>
+        
+</body>    
+
+</html>

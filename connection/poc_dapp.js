@@ -115,6 +115,117 @@ module.exports = {
 
   },
 
+  getListedAsValidatorNew: function(address,sender, callback) {
+    var self = this;
+    var config = require('../config/config');
+    var Web3 = require('web3');
+    var web3 = new Web3(config.clientEndPoint);
+
+    var sender = config.address;
+    var contractAddr = config.contractAddress;
+    
+    //var address = '0x3042D8086E1a52D6a2c4D7B8068a1064bDC32FCC';
+
+
+    var tokenInstance = new web3.eth.Contract(zecash_artifact.abi, contractAddr, {
+      from: sender
+    });
+
+    var txnNonce;
+    var txnObject;
+
+    web3.eth.getTransactionCount(sender)
+      .then(function(data){
+        txnNonce = data;
+        console.log(txnNonce);
+        txnObject = {
+          from : sender,
+          to : contractAddr,
+          value : "0x0",
+          gasPrice: web3.utils.toHex(web3.utils.toWei('20', 'Gwei')),
+          gas: web3.utils.toHex('250000'),
+          nonce: txnNonce,
+          data: tokenInstance.methods.setValidators(address).encodeABI()
+        };
+
+        console.log(txnObject);
+
+        //sendTransactionToEth(txnObject, req.body.prvkey);
+
+        var Tx = require('ethereumjs-tx');
+        var privateKey = new Buffer(config.privkey, 'hex');
+
+        var tx = new Tx(txnObject);
+        tx.sign(privateKey);
+
+        var serializedTx = tx.serialize();
+        console.log(serializedTx);
+
+        web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+          .on('receipt', function(receipt){
+            console.log("Receipt Called");
+            callback(receipt.valueOf());
+            /* res.json({
+              "data" : receipt
+            }); */
+          })
+          .on('error', function(err){
+            console.log("Error Called: "+ err);
+
+            var minedPending = "Be aware that it might still be mined";
+            var sourceErr = " " + err + " ";
+            if(sourceErr.indexOf(minedPending) !== -1)
+            {
+              var rtnObj = {
+                "status" : "pending",
+                "data" : err,
+                "errmsg" : "Your transaction is on the Blockchain. Depending on data traffic, it may take anywhere between 5-30 minutes to execute. Kindly check your wallet again in some time to be sure that the transaction was successfully executed."
+                };
+
+              callback(rtnObj.valueOf());  
+            }
+            else
+            {
+              console.log(e);
+              callback("ERROR 404");
+              /* res.json({
+                "status" : "error",
+                "data" : err,
+                "errmsg" : "There has been some error processing your transaction. Please try again later."
+              }) */
+            }
+          });
+      });
+
+    /*}) .then(function(value) {
+        callback(value.valueOf());
+    }).catch(function(e) {
+      console.log(e);
+      callback("ERROR 404");
+    }); */
+
+  },
+
+  getAllValidatorsNew: function (callback) {
+    var self = this;
+    
+    var config = require('../config/config');
+    var Web3 = require('web3');
+    var web3 = new Web3(config.clientEndPoint);
+
+    var contractInstance = new web3.eth.Contract(zecash_artifact.abi, config.contractAddress);
+
+    var number = contractInstance.methods.getValidators().call()
+    .then(function(data){
+      callback(data.valueOf());
+    })
+    .catch(function(e) {
+      console.log(e);
+      callback("ERROR 404");
+    });
+
+  },
+
   removeValidator: function (address, sender, callback) {
     var self = this;
 

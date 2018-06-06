@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.23;
 
 library SafeMath {
     function mul(uint256 a, uint256 b) internal constant returns (uint256) {
@@ -36,7 +36,7 @@ contract Ownable {
      * @dev The Ownable constructor sets the original `owner` of the contract to the sender
      * account.
      */
-    function Ownable() public {
+    constructor() public {
         owner = msg.sender;
     }
     /**
@@ -128,27 +128,27 @@ contract ZeCash_PoS is Ownable {
     
     /*** Functions ***************/
 
-    function ZeCash_PoS() public {
+    constructor() public {
         
         maxTotalSupply = 10 * 10**26; // 500 Mil.
         totalInitialSupply = 10**26; // 1 Mil.
         totalStakedAmount = 100000;
-        chainStartTime = now;
+        chainStartTime = block.timestamp;
         chainStartBlockNumber = block.number;
-        uint64 _now = uint64(now);
+        uint64 _now = uint64(block.timestamp);
         balances[owner] = totalInitialSupply;
         totalSupply = totalInitialSupply;
         validatorAccts = [0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006,0x323233A2052D66b247c96d3A7E63164B5Cd8afBb,0x5Ac69B00570412aD65F59404308005b4bea0Db77,0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f,0x1B2FE0836FB9306250C47143F7274ba38dD2cA07,0x8c4794FB81114A2daFe3B04eB3D4a3944752b276];
 
-        var genesisblock = blockchain[0];
+        Block storage genesisblock = blockchain[0];
         genesisblock.index = 0;
-        genesisblock.timestamp = now;
+        genesisblock.timestamp = block.timestamp;
         genesisblock.hash = "";
         genesisblock.prevHash = "";
         genesisblock.validator = owner;
         blockIndexes.push(genesisblock.index);
 
-        var validator1 = validators[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006];
+        Validator storage validator1 = validators[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006];
         
         validator1.totalAmount = 4000;
         validator1.earnedZecash = 0;
@@ -159,7 +159,7 @@ contract ZeCash_PoS is Ownable {
         validator1.noBlocksForged = 0;
         transferIns[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006].push(transferInStruct(uint128(balances[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006]),_now));
 
-        var validator2 = validators[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb];
+        Validator storage validator2 = validators[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb];
         
         validator2.totalAmount = 6000;
         validator2.earnedZecash = 0;
@@ -170,18 +170,18 @@ contract ZeCash_PoS is Ownable {
         validator2.stakedPercent = percent(balances[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb],totalStakedAmount,3);
         transferIns[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb].push(transferInStruct(uint128(balances[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb]),_now));
 
-        var validator3 = validators[0x5Ac69B00570412aD65F59404308005b4bea0Db77];
+        Validator storage validator3 = validators[0x5Ac69B00570412aD65F59404308005b4bea0Db77];
        
         validator3.totalAmount = 20000;
         validator3.earnedZecash = 0;
         validator3.addr = 0x5Ac69B00570412aD65F59404308005b4bea0Db77;
         validator3.noBlocksForged = 0;
         validator3.defValidator = true;
-         balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77] = 20000;
-         validator3.stakedPercent = percent(balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77],totalStakedAmount,3);
+        balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77] = 20000;
+        validator3.stakedPercent = percent(balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77],totalStakedAmount,3);
         transferIns[0x5Ac69B00570412aD65F59404308005b4bea0Db77].push(transferInStruct(uint128(balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77]),_now));
 
-        var validator4 = validators[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f];
+        Validator storage validator4 = validators[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f];
        
         validator4.totalAmount = 25000;
         validator4.earnedZecash = 0;
@@ -192,7 +192,7 @@ contract ZeCash_PoS is Ownable {
         validator4.stakedPercent = percent(balances[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f],totalStakedAmount,3);
         transferIns[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f].push(transferInStruct(uint128(balances[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f]),_now));
 
-        var validator5 = validators[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07];
+        Validator storage validator5 = validators[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07];
         
         validator5.totalAmount = 40000;
         validator5.earnedZecash = 0;
@@ -203,7 +203,7 @@ contract ZeCash_PoS is Ownable {
         validator5.stakedPercent = percent(balances[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07],totalStakedAmount,3);
         transferIns[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07].push(transferInStruct(uint128(balances[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07]),_now));
 
-        var validator6 = validators[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276];
+        Validator storage validator6 = validators[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276];
         
         validator6.totalAmount = 5000;
         validator6.earnedZecash = 0;
@@ -215,7 +215,7 @@ contract ZeCash_PoS is Ownable {
         transferIns[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276].push(transferInStruct(uint128(balances[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276]),_now));    
     }
     
-    function transfer(address _to, uint256 _value) public returns (bool) {
+    function transfer(address _to, uint256 _value) external returns (bool) {
         if(msg.sender == _to) return mint(_to);
         balances[msg.sender] = balances[msg.sender].sub(_value);
         balances[_to] = balances[_to].add(_value);
@@ -227,7 +227,7 @@ contract ZeCash_PoS is Ownable {
         return true;
     }
 
-    function percent(uint256 numerator, uint256 denominator, uint256 precision) internal constant returns(uint quotient) {
+    function percent(uint256 numerator, uint256 denominator, uint256 precision) internal view returns(uint quotient) {
          // caution, check safe-to-multiply here
         uint _numerator  = numerator * 10 ** (precision+1);
         // with rounding of last digit
@@ -236,43 +236,42 @@ contract ZeCash_PoS is Ownable {
     }
 
 
-    function getZecash(address _to, uint256 _value) public returns (bool) {
+    function getZecash(address _to, uint256 _value) external returns (bool) {
 
-        if (balances[owner] < _value || (balances[_to] + _value )> 100000) return false;
+        if (balances[owner] < _value || (balances[_to] + _value ) > 100000) return false;
         validators[_to].totalAmount = validators[_to].totalAmount + _value;
         balances[owner] = balances[owner].sub(_value);
         balances[_to] = balances[_to].add(_value);
         emit Transfer(owner, _to, _value);
         if(transferIns[_to].length > 0) delete transferIns[_to];
-        uint64 _now = uint64(now);
+        uint64 _now = uint64(block.timestamp);
         transferIns[owner].push(transferInStruct(uint128(balances[owner]),_now));
         transferIns[_to].push(transferInStruct(uint128(_value),_now));
         totalStakedAmount = totalStakedAmount + _value;
         validators[_to].stakedPercent = percent(balances[_to],totalStakedAmount,3);
 
-        for (var j = 0; j < validatorAccts.length; j++) {
+        for (uint j = 0; j < validatorAccts.length; j++) {
 
-            
-                validators[validatorAccts[j]].stakedPercent = percent(balances[(validatorAccts[j])],totalStakedAmount,3);
+            validators[validatorAccts[j]].stakedPercent = percent(balances[(validatorAccts[j])],totalStakedAmount,3);
             
         }
         
         return true;
     }
     
-    function balanceOf(address _owner) public constant returns (uint256 balance) {
+    function balanceOf(address _owner) external view returns (uint256 balance) {
         return balances[_owner];
     }
 
     function calculateHash(uint256 newBlockIndex) internal returns(bytes32) {
-        var newblock = blockchain[newBlockIndex];
+        Block storage newblock = blockchain[newBlockIndex];
         bytes32 hash = sha256(newblock.index, newblock.timestamp, newblock.prevHash, newblock.data);
         return hash;
     }
 
-    function forgeBlock(uint256 oldBlockIndex, address _address) public {
-        var oldblock = blockchain[oldBlockIndex];
-        var newblock = blockchain[oldBlockIndex+1];
+    function forgeBlock(uint256 oldBlockIndex, address _address) external {
+        Block storage oldblock = blockchain[oldBlockIndex];
+        Block storage newblock = blockchain[oldBlockIndex+1];
         newblock.index = oldblock.index + 1;
         newblock.timestamp = now;
         newblock.prevHash = oldblock.hash;
@@ -280,20 +279,20 @@ contract ZeCash_PoS is Ownable {
         newblock.hash = calculateHash(newblock.index);
         newblock.validator = _address;
         blockIndexes.push(newblock.index);
-        var val = validators[_address];
+        Validator storage val = validators[_address];
         val.noBlocksForged = val.noBlocksForged + 1;
         val.blocks.push(newblock.index);
     }
 
-    function getAllIndexes () view public returns (uint256[]) {
+    function getAllIndexes () view external returns (uint256[]) {
         return blockIndexes;
     }
 
-    function getBlock (uint256 index) view public returns (uint256, uint256, bytes32, bytes32, address) {
+    function getBlock (uint256 index) view external returns (uint256, uint256, bytes32, bytes32, address) {
         return (blockchain[index].index, blockchain[index].timestamp, blockchain[index].hash, blockchain[index].prevHash,blockchain[index].validator );
     }
 
-    function isBlockValid(uint256 newBlockIndex, uint256 oldBlockIndex) public returns(bool) {
+    function isBlockValid(uint256 newBlockIndex, uint256 oldBlockIndex) external returns(bool) {
         if (oldBlockIndex != newBlockIndex) {
             return false;
         }
@@ -306,13 +305,13 @@ contract ZeCash_PoS is Ownable {
         return true;
     }
     
-   function mint(address _address) canPoSMint public returns (bool) {
+    function mint(address _address) canPoSMint internal returns (bool) {
         if(balances[_address] <= 0) return false;
         if(transferIns[_address].length <= 0) return false;
         uint reward = getProofOfStakeReward(_address);
         if(reward <= 0) return false;
         totalSupply = totalSupply.add(reward);  
-        var validatorBal = validators[_address];
+        Validator storage validatorBal = validators[_address];
         validatorBal.earnedZecash = validatorBal.earnedZecash.add(reward.div(100));
         delete transferIns[_address];
         transferIns[_address].push(transferInStruct(uint128(balances[_address]),uint64(now)));
@@ -320,11 +319,11 @@ contract ZeCash_PoS is Ownable {
         return true;
     }
     
-    function getBlockNumber() view public returns (uint blockNumber) {
+    function getBlockNumber() view external returns (uint blockNumber) {
         blockNumber = block.number.sub(chainStartBlockNumber);
     }
 
-    function annualInterest() constant public returns(uint interest) {
+    function annualInterest() view external returns(uint interest) {
         uint _now = now;
         interest = maxMintProofOfStake;
         if((_now.sub(stakeStartTime)).div(1 years) == 0) {
@@ -334,13 +333,13 @@ contract ZeCash_PoS is Ownable {
         }
     }
     
-    function getCoinAge(address _address) public view returns (uint _coinAge) {
+    function getCoinAge(address _address) internal view returns (uint _coinAge) {
         if(transferIns[_address].length <= 0) return 0;
 
         for (uint i = 0; i < transferIns[_address].length; i++){
-            if( now < uint(transferIns[_address][i].time).add(stakeMinAge) ) continue;
+            if( block.timestamp < uint(transferIns[_address][i].time).add(stakeMinAge) ) continue;
 
-            uint nCoinSeconds = now.sub(uint(transferIns[_address][i].time));
+            uint nCoinSeconds = block.timestamp.sub(uint(transferIns[_address][i].time));
             if( nCoinSeconds > stakeMaxAge ) nCoinSeconds = stakeMaxAge;
 
             _coinAge = _coinAge.add(uint(transferIns[_address][i].amount) * nCoinSeconds);
@@ -348,7 +347,7 @@ contract ZeCash_PoS is Ownable {
         return _coinAge;
     }
     
-    function ownerBurnToken(uint _value) onlyOwner public {
+    function ownerBurnToken(uint _value) onlyOwner external {
         require(_value > 0);
         balances[owner] = balances[owner].sub(_value);
         delete transferIns[owner];
@@ -380,8 +379,8 @@ contract ZeCash_PoS is Ownable {
         return (_coinAge * interest).div(365 * (10**decimals));
     }
 
-    function setValidators (address _address) public {
-        var validator = validators[_address];
+    function setValidators (address _address) external {
+        Validator storage validator = validators[_address];
         // validator.stakedPercent = 0;
         validator.totalAmount = 0;
         validator.addr = _address;
@@ -390,20 +389,20 @@ contract ZeCash_PoS is Ownable {
         validatorAccts.push(_address);
     }
 
-    function IndexOf(address _address) returns(uint) {
-    uint i = 0;
-    while (validatorAccts[i] != _address) {
-      i++;
+    function IndexOf(address _address) internal returns(uint) {
+        uint i = 0;
+        while (validatorAccts[i] != _address) {
+            i++;
+        }
+        return i;
     }
-    return i;
-  }
 
   /** Removes the given value in an array. */
-  function removeValidator(address _address) public {
-         balances[owner] = balances[owner].add(validators[_address].totalAmount);
-         totalStakedAmount = totalStakedAmount.sub(validators[_address].totalAmount);
-         for (var j = 0; j < validatorAccts.length; j++) {
-         validators[validatorAccts[j]].stakedPercent = percent(balances[(validatorAccts[j])],totalStakedAmount,3);
+    function removeValidator(address _address) external {
+        balances[owner] = balances[owner].add(validators[_address].totalAmount);
+        totalStakedAmount = totalStakedAmount.sub(validators[_address].totalAmount);
+        for (uint j = 0; j < validatorAccts.length; j++) {
+            validators[validatorAccts[j]].stakedPercent = percent(balances[(validatorAccts[j])],totalStakedAmount,3);
         }
         validators[_address].totalAmount = 0;
         balances[_address] = 0;
@@ -412,32 +411,32 @@ contract ZeCash_PoS is Ownable {
         validators[_address].stakedPercent = 0;
         uint i = IndexOf(_address);
         RemoveByIndex(i);
-  }
+    }
 
   /** Removes the value at the given index in an array. */
-  function RemoveByIndex(uint i) {
-    while (i<validatorAccts.length-1) {
-      validatorAccts[i] = validatorAccts[i+1];
-      i++;
+    function RemoveByIndex(uint _i) internal {
+        while (_i<validatorAccts.length-1) {
+            validatorAccts[_i] = validatorAccts[_i+1];
+            _i++;
+        }
+        validatorAccts.length--;
     }
-    validatorAccts.length--;
-  }
 
-    function getValidators () view public returns (address[]) {
+    function getValidators () view external returns (address[]) {
         return validatorAccts;
     }
 
-    function getValidator (address ins) view public returns (uint256,uint256,uint256, address, bool, uint256, uint256[]) {
+    function getValidator (address ins) view external returns (uint256,uint256,uint256, address, bool, uint256, uint256[]) {
        
         return (validators[ins].totalAmount,validators[ins].stakedPercent,validators[ins].earnedZecash, validators[ins].addr, validators[ins].defValidator,validators[ins].noBlocksForged, validators[ins].blocks);
     }
 
-    function countValidators() view public returns (uint) {
+    function countValidators() view external returns (uint) {
         return validatorAccts.length;
     }
     
-    function getBalance(address addr) public view returns(uint,uint) {
-       var stakedpercent = percent(balances[addr],totalStakedAmount,3);
+    function getBalance(address addr) external view returns(uint,uint) {
+        uint256 stakedpercent = percent(balances[addr],totalStakedAmount,3);
         return (balances[addr],stakedpercent);
     }
 

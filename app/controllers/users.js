@@ -81,6 +81,20 @@ module.exports.userControllerFunction = function(app) {
     let identityAdd = identity.address.toLowerCase();
 
     truffle_connect.getListedAsValidator(identityAdd, sender,function (answer) {
+      console.log(answer);
+      res.send(identityAdd);
+    });
+
+  });
+
+  userRouter.post('/getListedAsValidatorNew', (req, res) => {
+    
+    console.log("**** GET /getListedAsValidatorNew ****");
+    let identity = EthCrypto.createIdentity();
+    let identityAdd = identity.address.toLowerCase();
+
+    truffle_connect.getListedAsValidatorNew(identityAdd, sender,function (answer) {
+      console.log(answer);
       res.send(identityAdd);
     });
 
@@ -105,6 +119,16 @@ module.exports.userControllerFunction = function(app) {
     console.log("**** GET /getAllValidators ****");
 
     truffle_connect.getAllValidators(function (answer) {
+      console.log(answer);
+      res.send(answer);
+    });
+
+  });
+
+  userRouter.get('/getAllValidatorsNew', (req, res) => {
+    console.log("**** GET /getAllValidatorsNew ****");
+
+    truffle_connect.getAllValidatorsNew(function (answer) {
       console.log(answer);
       res.send(answer);
     });

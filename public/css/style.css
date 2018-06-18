@@ -556,7 +556,7 @@ h3 {
 }
 
 .currentval-font {
-    font-size: 1.2em;
+    font-size: 1.0em;
 }
 
 .you-font {
@@ -594,7 +594,7 @@ md-card.md-default-theme, md-card {
      font-size: 1.2em;
     }
     .currentval-font {
-    font-size: 1.0em;
+    font-size: 0.8em;
 }
 }
 

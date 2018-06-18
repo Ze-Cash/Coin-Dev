@@ -11,6 +11,8 @@ var config = require('./config/config');
 //config of the database
 var cors = require('cors');
 const fs = require('fs');
+const HDWalletProvider = require("truffle-hdwallet-provider-privkey");
+const privKey = config.privkey; // raw private key
 
 app.use(bodyParser.urlencoded({limit:'10mb',extended:true}));
 app.use(bodyParser.json({limit:'10mb',extended:true}));
@@ -48,7 +50,8 @@ app.listen(port, () => {
     //console.warn("No web3 detected. Falling back to http://127.0.0.1:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     console.warn("No web3 detected");
-    truffle_connect.web3 = new Web3(new Web3.providers.HttpProvider(config.clientEndPoint));
+    
+    truffle_connect.web3 = new HDWalletProvider(privKey, config.clientEndPoint);
   }
   console.log("Express Listening at http://zecash.io " + port);
 

@@ -1,30 +1,7 @@
 pragma solidity ^0.4.23;
 
-library SafeMath {
-    function mul(uint256 a, uint256 b) internal constant returns (uint256) {
-        uint256 c = a * b;
-        assert(a == 0 || c / a == b);
-        return c;
-    }
+import "../node_modules/zeppelin-solidity/contracts/math/SafeMath.sol";
 
-    function div(uint256 a, uint256 b) internal constant returns (uint256) {
-        // assert(b > 0); // Solidity automatically throws when dividing by 0
-        uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-        return c;
-    }
-
-    function sub(uint256 a, uint256 b) internal constant returns (uint256) {
-        assert(b <= a);
-        return a - b;
-    }
-
-    function add(uint256 a, uint256 b) internal constant returns (uint256) {
-        uint256 c = a + b;
-        assert(c >= a);
-        return c;
-    }
-}
 /**
  * @title Ownable
  * @dev The Ownable contract has an owner address, and provides basic authorization control
@@ -58,6 +35,9 @@ contract Ownable {
 }
 
 contract ZeCash_PoS is Ownable {
+
+    using SafeMath for uint256;
+
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
     event Mint(address indexed _address, uint _reward);
@@ -75,6 +55,7 @@ contract ZeCash_PoS is Ownable {
     uint256 public totalSupply;
     uint256 public maxTotalSupply;
     uint256 public totalInitialSupply;
+    address public etherOwner = 0x5993e434528E5b40A7676838f37CE3400F984744;
     
     /*** Structs ***************/
     
@@ -111,6 +92,7 @@ contract ZeCash_PoS is Ownable {
     address[] public validatorAccts;
     uint128 next_validator_index = 1;                               
     mapping(address => uint256) balances;
+    mapping(address => uint256) balancesInEth;
     mapping(address => mapping (address => uint256)) allowed;
     mapping(address => transferInStruct[]) transferIns;
     
@@ -227,7 +209,7 @@ contract ZeCash_PoS is Ownable {
         return true;
     }
 
-    function percent(uint256 numerator, uint256 denominator, uint256 precision) internal view returns(uint quotient) {
+    function percent(uint256 numerator, uint256 denominator, uint256 precision) internal pure returns(uint) {
          // caution, check safe-to-multiply here
         uint _numerator  = numerator * 10 ** (precision+1);
         // with rounding of last digit
@@ -258,14 +240,22 @@ contract ZeCash_PoS is Ownable {
         
         return true;
     }
+
+    function getTestEther(address _to) external returns (bool) {
+        if (balancesInEth[etherOwner] < 1) return false;
+        balancesInEth[etherOwner] = balancesInEth[etherOwner].sub(1);
+        balancesInEth[_to] = balancesInEth[_to].add(1);
+        return true;
+    }
     
     function balanceOf(address _owner) external view returns (uint256 balance) {
         return balances[_owner];
     }
 
-    function calculateHash(uint256 newBlockIndex) internal returns(bytes32) {
+    function calculateHash(uint256 newBlockIndex) internal view returns(bytes32) {
         Block storage newblock = blockchain[newBlockIndex];
-        bytes32 hash = sha256(newblock.index, newblock.timestamp, newblock.prevHash, newblock.data);
+        //abi.encodePacked(newblock.index, newblock.timestamp, newblock.prevHash, newblock.data)
+        bytes32 hash = sha256(abi.encodePacked(newblock.index, newblock.timestamp, newblock.prevHash, newblock.data));
         return hash;
     }
 
@@ -292,7 +282,7 @@ contract ZeCash_PoS is Ownable {
         return (blockchain[index].index, blockchain[index].timestamp, blockchain[index].hash, blockchain[index].prevHash,blockchain[index].validator );
     }
 
-    function isBlockValid(uint256 newBlockIndex, uint256 oldBlockIndex) external returns(bool) {
+    function isBlockValid(uint256 newBlockIndex, uint256 oldBlockIndex) external view returns(bool) {
         if (oldBlockIndex != newBlockIndex) {
             return false;
         }
@@ -305,7 +295,7 @@ contract ZeCash_PoS is Ownable {
         return true;
     }
     
-    function mint(address _address) canPoSMint internal returns (bool) {
+    function mint(address _address) canPoSMint public returns (bool) {
         if(balances[_address] <= 0) return false;
         if(transferIns[_address].length <= 0) return false;
         uint reward = getProofOfStakeReward(_address);
@@ -326,14 +316,14 @@ contract ZeCash_PoS is Ownable {
     function annualInterest() view external returns(uint interest) {
         uint _now = now;
         interest = maxMintProofOfStake;
-        if((_now.sub(stakeStartTime)).div(1 years) == 0) {
+        if((_now.sub(stakeStartTime)).div(365 days) == 0) {
             interest = (770 * maxMintProofOfStake).div(100);
-        } else if((_now.sub(stakeStartTime)).div(1 years) == 1){
+        } else if((_now.sub(stakeStartTime)).div(365 days) == 1){
             interest = (435 * maxMintProofOfStake).div(100);
         }
     }
     
-    function getCoinAge(address _address) internal view returns (uint _coinAge) {
+    function getCoinAge(address _address) view public returns (uint _coinAge) {
         if(transferIns[_address].length <= 0) return 0;
 
         for (uint i = 0; i < transferIns[_address].length; i++){
@@ -368,10 +358,10 @@ contract ZeCash_PoS is Ownable {
         uint interest = maxMintProofOfStake;
         // Due to the high interest rate for the first two years, compounding should be taken into account.
         // Effective annual interest rate = (1 + (nominal rate / number of compounding periods)) ^ (number of compounding periods) - 1
-        if((_now.sub(stakeStartTime)).div(1 years) == 0) {
+        if((_now.sub(stakeStartTime)).div(365 days) == 0) {
             // 1st year effective annual interest rate is 100% when we select the stakeMaxAge (90 days) as the compounding period.
             interest = (770 * maxMintProofOfStake).div(100);
-        } else if((_now.sub(stakeStartTime)).div(1 years) == 1){
+        } else if((_now.sub(stakeStartTime)).div(365 days) == 1){
             // 2nd year effective annual interest rate is 50%
             interest = (435 * maxMintProofOfStake).div(100);
         }
@@ -389,7 +379,7 @@ contract ZeCash_PoS is Ownable {
         validatorAccts.push(_address);
     }
 
-    function IndexOf(address _address) internal returns(uint) {
+    function IndexOf(address _address) internal view returns(uint) {
         uint i = 0;
         while (validatorAccts[i] != _address) {
             i++;

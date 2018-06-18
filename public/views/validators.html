@@ -7,7 +7,9 @@
        		
        		<h1>All Validators</h1>
        		<br>
-       		<div class="currentval-font text-data" ng-if="validator.currentVal"><span class="title">Current Validator:</span> {{validator.currentVal}}</div>
+       		<div class="currentval-font text-data" ng-if="validator.currentVal"><span class="title">Current Validator:</span> {{validator.currentVal}}<span ng-if="validator.currentVal">&nbsp;&nbsp;<i class="fa fa-spinner fa-spin" style="font-size:24px;color:#11133b;"></i></span></div>
+
+       		<div class="title" ng-if="validator.currentVal">Time To Next Validator: {{counter}} s</div>
      		<br>
 	        <md-card>
 			  <md-card-content>
@@ -15,7 +17,7 @@
 
 			   <div class="text-data big-font"><span class="title">Address:</span> {{validator.address}}</div> 
 			    <p class="big-font"><span class="title">ZeCash Staked:</span> {{validator.totalBalance}}</p> 
-			    <p class="big-font"><span class="title">Staking Weight:</span> {{validator.stakedPercent}}</p> 
+			    <p class="big-font"><span class="title">Staking Weight:</span> {{validator.stakedPercent}}%</p> 
 			    <p class="big-font"><span class="title">Blocks Validated:</span> {{validator.blocksForged}}</p> 
 			 </md-card-content>
 			 

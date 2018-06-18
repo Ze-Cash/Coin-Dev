@@ -5,6 +5,8 @@ posApp.controller('dashboardController',['$window','dashboardService','$state','
 
 	this.address = ($sessionStorage.address !== undefined)?$sessionStorage.address:'';
 
+	this.privatekey = ($sessionStorage.privatekey !== undefined)?$sessionStorage.privatekey:'';
+	
 	this.totalBalance = ($sessionStorage.totalBalance !== undefined)?$sessionStorage.totalBalance:0;
 
 	this.amount = 1000;
@@ -20,6 +22,8 @@ posApp.controller('dashboardController',['$window','dashboardService','$state','
 	this.blocksForged = ($sessionStorage.blocksForged !== undefined)?$sessionStorage.blocksForged:0;
 
 	this.errormsg = '';
+
+	this.etherBal = ($sessionStorage.etherBal !== undefined)?$sessionStorage.etherBal:0;
 
 	this.removeValidator = function() {
 		dashboardService.removeVal(main.address).
@@ -39,22 +43,26 @@ posApp.controller('dashboardController',['$window','dashboardService','$state','
 				delete $sessionStorage.blocksForged;
 				delete $sessionStorage.stakedPercent;
 				delete $sessionStorage.totalBalance
-				$sessionStorage.address = response.data;
-				main.address = response.data;
+				$sessionStorage.address = response.data.identityAdd;
+				main.privatekey = response.data.privateKey;
+				$sessionStorage.privatekey = response.data.privateKey;
+				main.address = response.data.identityAdd;
+				main.getEtherAmount();
+				//console.log("validator",response.data);
 			},function errorCallback(response) {
 				console.log(response);
 				console.log("some error occurred. Check the console.");
 			}).then(function() {
 				$state.go('dashboard', {}, { reload: true });
-				setInterval(function(){
+				/*setInterval(function(){
 					 $window.location.reload();
-				}, 500);
+				}, 500);*/
 				
 			})
 	}
 
 	this.getZecashAmount = function() {
-		dashboardService.getZecash(main.address, main.amount).
+		dashboardService.getZecash(main.address, main.amount, main.privatekey).
 		then(function successCallback(response) {
 				console.log(response);
 				$sessionStorage.totalBalance = response.data[0];
@@ -67,6 +75,25 @@ posApp.controller('dashboardController',['$window','dashboardService','$state','
 				console.log("some error occurred. Check the console.");
 			});
 	}
+
+	this.getEtherAmount = function() {
+		dashboardService.getEthers(main.address).
+		then(function successCallback(response) {
+				console.log(response);
+				$sessionStorage.etherBal = response.data[0];
+				main.etherBal = response.data[0];
+			
+			},function errorCallback(response) {
+				console.log(response);
+				console.log("some error occurred. Check the console.");
+			});
+	}
+
+	/*this.getListedAndEthers = function() {
+		main.getListedAsValidator().then(function() {
+			main.getEtherAmount();
+		})
+	}*/
 
 	this.getValidatorInfo = function() {
 		dashboardService.getValidator(main.address).

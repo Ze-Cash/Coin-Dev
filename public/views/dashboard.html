@@ -12,9 +12,11 @@
 			    <div class="panel-body text-data"><span class="title">Address:</span> {{dashboard.address}}</div>
 			    <div class="panel-body"><span class="title">Balance:</span> {{dashboard.totalBalance}} ZCH</div>
 			    <div class="panel-body"><span class="title">Staked Percent:</span> {{dashboard.stakedPercent}} %</div>
-			    <div class="panel-body"><span class="title">ZCH Earned:</span>{{dashboard.zchEarned}} ZCH</div>
+			    <div class="panel-body"><span class="title">ZCH Earned: </span>{{dashboard.zchEarned}} ZCH</div>
 			    <div class="panel-body"><span class="title">Blocks Forged: </span>{{dashboard.blocksForged}}</div>
 			  </div>
+
+			 <!-- <a class="btn-lg zecash-btn" data-ng-click="dashboard.getEtherAmount()" id="testether">Get Test Ether</a>-->
 
 
 			  <form name="getzecash" method="post">
@@ -32,7 +34,7 @@
 				    
 				    <button type="submit" class="btn-lg zecash-btn" data-ng-click="dashboard.getZecashAmount()" ng-disabled="getzecash.$invalid">Get ZeCash</button>
 
-				    <a class="btn-lg validator-btn" ui-sref="validator" id="validator1">See ZeCash in Action</a>
+				    <a class="btn-lg zecash-btn" ui-sref="validator" id="validator1">See ZeCash in Action</a>
 
 				   <!-- <div><a class="btn-lg validator-btn large-screen-hide" ui-sref="validator" id="validator2">See ZeCash in Action</a></div>-->
 				    

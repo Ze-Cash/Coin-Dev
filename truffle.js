@@ -8,6 +8,8 @@ var web3 = new Web3();
 const HDWalletProvider = require("truffle-hdwallet-provider-privkey");
 const privKey = config1.privkey; // raw private key
 
+//const w = new HDWalletProvider(privKey, "https://rinkeby.infura.io/sgjUW2LTBPHilz3xZyRs")
+//var web3 = new Web3(w.engine)
 module.exports = {
   networks: {
     development: {
@@ -20,19 +22,19 @@ module.exports = {
         return new HDWalletProvider(privKey, config1.clientEndPoint);
       },
       network_id: 3,
-      gas: 4700000,   // <--- Twice as much
-      //gasPrice: 10000000000
-      gasPrice: web3.toWei('10','gwei')
+      gas: 7000000,   // <--- Twice as much
+      gasPrice: 10000000000
+      //gasPrice: web3.toWei('10','gwei')
 
     },
     rinkeby: {
       provider: function() {
         return new HDWalletProvider(privKey, config1.clientEndPoint);
       },
-      network_id: 2,
-      gas: 4700000,   // <--- Twice as much
-      //gasPrice: 10000000000
-      gasPrice: web3.toWei('10','gwei')
+      network_id: 4,
+      gas: 7000000,   // <--- Twice as much
+      gasPrice: 10000000000
+      //gasPrice: web3.toWei('10','gwei')
 
     }
   }

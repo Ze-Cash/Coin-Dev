@@ -4,7 +4,7 @@ posApp.service('dashboardService',function($http) {
     var main = this;
 
     this.baseUrl = 'http://ec2-18-217-151-133.us-east-2.compute.amazonaws.com:3000/users/';
-
+//http://ec2-18-217-151-133.us-east-2.compute.amazonaws.com
     this.getListed = function() {
 
         return $http.post(main.baseUrl + 'getListedAsValidator');

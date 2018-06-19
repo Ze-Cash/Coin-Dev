@@ -7,7 +7,6 @@ posApp.service('validatorService',function($http) {
 
     this.showValidator = function(address) {
        
-
         return $http.get(main.baseUrl + 'showAllValidators');
     }
 

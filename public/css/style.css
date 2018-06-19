@@ -76,6 +76,21 @@ body {
     opacity: .5;
 }
 
+input[type="button"]
+{
+    font-family: 'Gentium Book Basic', serif;
+    padding: 8px 14px;
+}
+
+input[type="button"]:hover,
+input[type="button"]:focus {
+    
+    color: #ffffff;
+    text-decoration: underline;
+
+}
+
+
 .new-section {
     min-height: 100vh;
     height: auto;
@@ -492,9 +507,7 @@ h3 {
     text-decoration: none;
 }
 
-#validator2 {
-    margin-top: 10px;
-}
+
 
 @media only screen and (max-width: 767px) { 
 
@@ -541,9 +554,18 @@ h3 {
         margin-top: 10px;
         font-size: 0.8em;
     }
+
+    #validator3 {
+        display: none;
+    }
 }
 
+@media only screen and (min-width: 481px) { 
 
+    #validator1 {
+        display: none;
+    }
+}
 
 /* ----------------------------------------------- */
 /* Validators Section  */

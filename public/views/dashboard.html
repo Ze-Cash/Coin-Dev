@@ -40,8 +40,8 @@
 				    <div class="form-group">
 				    
 				    <!--<button type="submit" class="btn-lg zecash-btn" data-ng-click="dashboard.getZecashAmount()" ng-disabled="getzecash.$invalid">Get ZeCash</button>-->
-				    <input type="button" class="btn-lg zecash-btn" ng-disabled="dashboard.totalBalance == 100000 || getzecash.$invalid" value="Get ZeCash" data-ng-click="dashboard.getZecashAmount()">
-				   <a class="btn-lg zecash-btn" ui-sref="validator" id="validator3">See ZeCash in Action</a>
+				    <input type="button" class="btn-lg zecash-btn" ng-disabled="dashboard.totalBalance == 100000 || getzecash.$invalid || dashboard.etherBal <= 0" value="Get ZeCash" data-ng-click="dashboard.getZecashAmount()">
+				   <a ng-if="dashboard.etherBal <= 0" class="btn-lg zecash-btn" ui-sref="validator" id="validator3">See ZeCash in Action</a>
 
 				   <!-- <div><a class="btn-lg validator-btn large-screen-hide" ui-sref="validator" id="validator2">See ZeCash in Action</a></div>-->
 				    

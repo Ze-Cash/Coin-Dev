@@ -64,7 +64,7 @@ posApp.controller('dashboardController',['$scope','$rootScope','$window','dashbo
 				console.log("some error occurred. Check the console.");
 			}).then(function() {
 				$rootScope.loading = false;
-				$state.go('dashboard');
+				$state.go('dashboard',{}, {reload: true});
 
 				/*setInterval(function(){
 					

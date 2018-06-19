@@ -1,5 +1,5 @@
 //Controller for Dashboard
-posApp.controller('dashboardController',['$rootScope','$window','dashboardService','$state','$sessionStorage', function($rootScope,$window,dashboardService,$state,$sessionStorage) {
+posApp.controller('dashboardController',['$scope','$rootScope','$window','dashboardService','$state','$sessionStorage', function($scope,$rootScope,$window,dashboardService,$state,$sessionStorage) {
 
 	var main = this;
 
@@ -25,7 +25,7 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 
 	this.etherBal = ($sessionStorage.etherBal !== undefined)?$sessionStorage.etherBal:0;
 
-
+	
 
 	this.removeValidator = function() {
 		dashboardService.removeVal(main.address).
@@ -38,6 +38,7 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 	}
 
 	this.getListedAsValidator = function() {
+		$rootScope.loading = true;
 		dashboardService.getListed().
 			then(function successCallback(response) {
 				//console.log(response);
@@ -49,22 +50,30 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 				main.privatekey = response.data.privateKey;
 				$sessionStorage.privatekey = response.data.privateKey;
 				main.address = response.data.identityAdd;
-				//$rootScope.address = response.data.identityAdd;
-				main.getEtherAmount();
+				$rootScope.enableButton = false;
+				$sessionStorage.enableButton = false;
+				//$scope.loading = false;
+				$rootScope.address = ($sessionStorage.address !== undefined)?($sessionStorage.address):(response.data.identityAdd);
+				
+				//main.getEtherAmount();
 				//console.log("validator",response.data);
 			},function errorCallback(response) {
 				console.log(response);
 				console.log("some error occurred. Check the console.");
 			}).then(function() {
+				$rootScope.loading = false;
 				$state.go('dashboard');
-				setInterval(function(){
+
+				/*setInterval(function(){
+					
 					 $window.location.reload();
-				}, 500);
+				}, 500);*/
 				
 			});
 	}
 
 	this.getZecashAmount = function() {
+		$rootScope.loading = true;
 		dashboardService.getZecash(main.address, main.amount, main.privatekey).
 		then(function successCallback(response) {
 				//console.log(response);
@@ -72,7 +81,7 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 				main.totalBalance = response.data[0];
 				$sessionStorage.stakedPercent = response.data[1]/10;
 				main.stakedPercent = response.data[1]/10;
-			
+				$rootScope.loading = false;
 			},function errorCallback(response) {
 				console.log(response);
 				console.log("some error occurred. Check the console.");
@@ -80,12 +89,14 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 	}
 
 	this.getEtherAmount = function() {
+		$rootScope.loading = true;
 		dashboardService.getEthers(main.address).
 		then(function successCallback(response) {
 				//console.log(response);
 				$sessionStorage.etherBal = response.data[0];
 				main.etherBal = response.data[0];
-			
+				$rootScope.loading = false;
+				
 			},function errorCallback(response) {
 				console.log(response);
 				console.log("some error occurred. Check the console.");
@@ -105,11 +116,17 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 				$sessionStorage.zchEarned = response.data[2];
 				$sessionStorage.blocksForged = response.data[5];
 				main.blocksForged = response.data[5];
-				
+				$rootScope.address = ($sessionStorage.address !== undefined)?($sessionStorage.address):'';
+				$rootScope.enableButton = false;
 			},function errorCallback(response) {
 				console.log(response);
 				console.log("some error occurred. Check the console.");
 		});
+	}
+
+	this.getInstructions = function() {
+		$rootScope.address = ($sessionStorage.address !== undefined)?($sessionStorage.address):'';
+		$rootScope.enableButton = ($sessionStorage.enableButton != undefined)?($sessionStorage.enableButton):true;
 	}
 	
 }]);

@@ -5,8 +5,15 @@
        	
        	<div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
        		
+       		<!--<div class="preloader" ng-if="loading"></div>-->
+       		<!--<span ng-if="loading">&nbsp;&nbsp;<i class="fa fa-spinner fa-spin" style="font-size:24px;color:#11133b;"></i></span>-->
+
+       		<div class="loading" ng-if="loading">Loading&#8230;</div>
        		<h1>Dashboard</h1>
      		<br>
+
+     		<input type="button" id="testether" class="btn-lg zecash-btn" ng-if="dashboard.etherBal <= 0" value="Get Test Ethers" data-ng-click="dashboard.getEtherAmount()">
+
 			<div class="panel panel-default">
 			    <div class="panel-heading"><strong>Validator Details</strong></div>
 			    <div class="panel-body text-data"><span class="title">Address:</span> {{dashboard.address}}</div>
@@ -33,7 +40,7 @@
 				    <div class="form-group">
 				    
 				    <!--<button type="submit" class="btn-lg zecash-btn" data-ng-click="dashboard.getZecashAmount()" ng-disabled="getzecash.$invalid">Get ZeCash</button>-->
-				    <input type="button" class="btn-lg zecash-btn" value="Get ZeCash" data-ng-click="dashboard.getZecashAmount()" ng-disabled="getzecash.$invalid">
+				    <input type="button" class="btn-lg zecash-btn" ng-disabled="dashboard.totalBalance == 100000 || getzecash.$invalid" value="Get ZeCash" data-ng-click="dashboard.getZecashAmount()">
 				   <a class="btn-lg zecash-btn" ui-sref="validator" id="validator3">See ZeCash in Action</a>
 
 				   <!-- <div><a class="btn-lg validator-btn large-screen-hide" ui-sref="validator" id="validator2">See ZeCash in Action</a></div>-->
@@ -43,7 +50,8 @@
  			 </form>
  			  <a class="btn-lg zecash-btn" ui-sref="validator" id="validator1">See ZeCash in Action</a>
 			 
-			
+
+			<div class="warning">Note: You can have maximum of 100000 ZCH in your Balance</div>
 	       
 
 			

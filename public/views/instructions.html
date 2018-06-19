@@ -1,13 +1,14 @@
 <!-- View for tickets from particular user -->
-<div class="container-fluid new-section">
+<div class="container-fluid new-section" ng-init="dashboard.getInstructions()">
       	
  	<div class="row">
        
        <div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
        		
-       		<h1>Instructions To Use The Platform</h1>
+       		<!--<state-loader></state-loader>-->
 
-       	
+          <div class="loading" ng-if="loading">Loading&#8230;</div>
+          <h1>Instructions To Use The Platform</h1>
 
 			<ol class="list">
 				
@@ -34,11 +35,16 @@
 
 			<div>
     			<br>
-    			
-    			<a class="btn-lg zecash-btn" data-ng-click="dashboard.getListedAsValidator()">Become A Validator</a> 
-    
+    		
+          <input type="button" class="btn-lg zecash-btn" value="Become A Validator" data-ng-click="dashboard.getListedAsValidator()" ng-if="enableButton">
+          
+          <br>
+
+          <a ng-if="!enableButton" class="btn-lg zecash-btn" ui-sref="dashboard" id="dashboard3">Go To Dashboard</a>
     		</div>
         <br>
+
+       
        		
  	   </div>
 

@@ -4,5 +4,17 @@ var posApp = angular.module('posApp', ['ui.router','ngMaterial','ngMessages','ng
 posApp.run(function($rootScope, $location,$http,$localStorage) {
 
     $rootScope.location = $location;
+
+     $rootScope.loading = false;
+     $rootScope.enableButton = true;
+     $rootScope.address = '';
+    /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+   $rootScope.preloader = false;
+}
+
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+       $rootScope.preloader = true;
+    }
+    */
  
 });

@@ -329,22 +329,22 @@ module.exports.userControllerFunction = function(app) {
                      truffle_connect.getAllIndexes(function (answer5) {
                       let indexArr = answer5;
                       //let indexArr = indexes.map(x => x.toNumber());
-                     console.log("answer5",answer5);
+                     //console.log("answer5",answer5);
                       let newIndex = indexArr[indexArr.length - 1];
                       
                       truffle_connect.getBlock(newIndex, function (answer8) {
                       
                           oldBlockValidator = answer8[4];
-                          console.log('answer8',answer8);
-                          console.log("old",oldBlockValidator);
-                          console.log("def",defaultValidators);
+                          //console.log('answer8',answer8);
+                          //console.log("old",oldBlockValidator);
+                          //console.log("def",defaultValidators);
                           if (selectedValidator != oldBlockValidator) {
                         async.forEach(defaultValidators, function(a3,callback) {
                             
                            truffle_connect.getCoinAge(a3,function (answer6) {
                               coinageOfValidator = answer6;
-                              console.log("answer6",answer6);
-                              console.log("coinage11",coinageOfValidator);
+                              //console.log("answer6",answer6);
+                              //console.log("coinage11",coinageOfValidator);
                               consideredCoinage = (coinageOfValidator/1000).toFixed();
                               if (coinageOfValidator > 0) {
                                 for (var i = 0; i < consideredCoinage; i++) {

@@ -27,12 +27,13 @@
   	<link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,300italic' rel='stylesheet' type='text/css'>
      <!-- AngularJS Material CSS now available via Google CDN; version 1.1.9 used here -->
    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css">
+   
 
 </head>
 
 <body>
 
-    <div ng-controller="dashboardController as dashboard" ng-if="location.path() !== '/users'" id="nav-parent" ng-cloak>
+    <div ng-if="location.path() !== '/users'" id="nav-parent" ng-cloak>
     
         <nav class="navbar navbar-default navbar-fixed-top">
           
@@ -57,10 +58,10 @@
                 
                 <ul class="nav navbar-nav navbar-right">
                
-                    <li><a ui-sref="instructions" ng-show = "dashboard.address != ''" id="instruction">Instructions</a></li>
+                    <li><a ui-sref="instructions" ng-show = "address != ''" id="instruction">Instructions</a></li>
                     
-                    <li><a class="active" ng-show = "dashboard.address != ''" ui-sref="dashboard" id="dashboard">Dashboard</a></li>
-                    <li><a ui-sref="validator" ng-show = "dashboard.address != ''" id="validator">All Validators</a></li>
+                    <li><a class="active" ng-show = "address != ''" ui-sref="dashboard" id="dashboard">Dashboard</a></li>
+                    <li><a ui-sref="validator" ng-show = "address != ''" id="validator">All Validators</a></li>
 
                 </ul>
             
@@ -72,7 +73,7 @@
     
     </div>
 
-    <div class="view-section" ui-view></div>
+    <div class="view-section" id="view-section" ui-view></div>
 
     <div ng-controller="footerController as myFooter" ng-show="myFooter.footerLoaded" ng-if="location.path() !== '/users'" ng-cloak>
 
@@ -110,6 +111,8 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    <script src="js/custom.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
@@ -135,6 +138,8 @@
     <script type="text/javascript" src="js/controllers/validatorController.js"></script>
 
     <script type="text/javascript" src="js/controllers/footerController.js"></script>
+
+
     
     <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.4 used here -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.js"></script>

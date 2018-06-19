@@ -5,6 +5,7 @@
        	
        	<div class="col-xs-12 col-sm-12 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8">
        		
+       		<div class="loading" ng-if="loading">Loading&#8230;</div>
        		<h1>All Validators</h1>
        		<br>
        		<div class="currentval-font text-data" ng-if="validator.currentVal"><span class="title">Current Validator:</span> {{validator.currentVal}}<span ng-if="validator.currentVal">&nbsp;&nbsp;<i class="fa fa-spinner fa-spin" style="font-size:24px;color:#11133b;"></i></span></div>
@@ -41,8 +42,8 @@
 				  <md-card-content>
 				   <div class="text-left big-font"><b>Validator {{$index+1}}</b></div>
 				   <div class="text-data"><span class="title">Address:</span> {{eachVal[3]}}</div> 
-				    <p><span class="title">ZeCash Staked:</span> {{eachVal[0]}}</p> 
-				    <p><span class="title">Staking Weight:</span> {{eachVal[1]/10}}%</p> 
+				    <p><span class="title">ZeCash Staked:</span> {{eachVal[0]}} ZCH</p> 
+				    <p><span class="title">Staking Weight:</span> {{eachVal[1]/10}} %</p> 
 				    <p><span class="title">Blocks Validated:</span> {{eachVal[5]}}</p> 
 				 </md-card-content>
 				 

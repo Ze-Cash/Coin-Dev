@@ -1,4 +1,4 @@
-posApp.config(['$stateProvider','$locationProvider','$urlRouterProvider','$httpProvider', function($stateProvider,$locationProvider,$urlRouterProvider,$httpProvider){
+posApp.config(['$transitionsProvider','$stateProvider','$locationProvider','$urlRouterProvider','$httpProvider', function($transitionsProvider,$stateProvider,$locationProvider,$urlRouterProvider,$httpProvider){
     
     $stateProvider
         // HOME STATE
@@ -27,6 +27,13 @@ posApp.config(['$stateProvider','$locationProvider','$urlRouterProvider','$httpP
 
        
         $urlRouterProvider.otherwise('/users');
+
+        $transitionsProvider.onBefore( {to:'base'}, 
+           function($transition$, $state) {
+         console.log($state.current.data);   
+            $rootScope.preloader = true;             
+          }
+        );
 
 }]);
 

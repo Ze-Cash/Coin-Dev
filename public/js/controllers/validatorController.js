@@ -1,5 +1,5 @@
 //Controller for Validator
-posApp.controller('validatorController',['$scope','$timeout','$window','validatorService','$state','$sessionStorage', function($scope,$timeout,$window,validatorService,$state,$sessionStorage) {
+posApp.controller('validatorController',['$rootScope','$scope','$timeout','$window','validatorService','$state','$sessionStorage', function($rootScope,$scope,$timeout,$window,validatorService,$state,$sessionStorage) {
 
 	var main = this;
 
@@ -88,6 +88,7 @@ posApp.controller('validatorController',['$scope','$timeout','$window','validato
 
 	this.forgeBlock = function() {
 		main.isDisabled = true;
+		$rootScope.loading = true;
 		validatorService.forge(main.address,main.privatekey).
 		then(function successCallback(response) {
 				main.isVisible=false;
@@ -96,7 +97,8 @@ posApp.controller('validatorController',['$scope','$timeout','$window','validato
 				}, 60000);
 				main.isDisabled = false;
 				main.isUpdated = true;
-				setTimeout(function(){main.isUpdated = false; }, 20000);
+				setTimeout(function(){main.isUpdated = false; }, 10000);
+				$rootScope.loading = false;
 				//main.isDisabled = false;
 			},function errorCallback(response) {
 				console.log(response);
@@ -113,7 +115,8 @@ posApp.controller('validatorController',['$scope','$timeout','$window','validato
 					$scope.counter = 60;
 					$scope.startTimer();
 				}*/
-				
+				$rootScope.address = ($sessionStorage.address !== undefined)?($sessionStorage.address):'';
+				$rootScope.enableButton = false;
 				main.prevCurrVal = response.data.data;
 				$sessionStorage.prevCurrVal = response.data.data;
 			},function errorCallback(response) {

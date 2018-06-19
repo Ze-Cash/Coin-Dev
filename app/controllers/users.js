@@ -30,6 +30,11 @@ module.exports.userControllerFunction = function(app) {
 
   userRouter.get('/getCurrentValidator', (req, res) => {
     console.log("**** GET /getCurrentValidator ****");
+    /*truffle_connect.getValidator(randValidator,function (answer1) {
+               
+          console.log("answer1",answer1);
+            res.send(answer1);
+    });*/
     res.send({data: randValidator})
   });
 
@@ -152,12 +157,15 @@ module.exports.userControllerFunction = function(app) {
        
         let addresses = answer;
        // console.log(addresses);
-       
+       //var index = 0;
 
         async.forEach(addresses, function (addr, callback) {
+             // index++;
                truffle_connect.getValidator(addr,function (answer1) {
-               
+               console.log("answer1",answer1);
+              // answer1[7] = index;
                 arrayOfValidators.push(answer1);
+               // console.log(answer1);
                 callback();
               });
                 // tell async that that particular element of the iterator is done
@@ -224,11 +232,7 @@ module.exports.userControllerFunction = function(app) {
 
     console.log("**** GET /forgeBlock ****");
 
-   
-    
-    
-
-    truffle_connect.getAllIndexes(function (answer) {
+   truffle_connect.getAllIndexes(function (answer) {
       let indexArr = answer;
      // let indexArr = indexes.map(x => x.toNumber());
      

@@ -26,12 +26,50 @@ body {
     visibility: hidden;
 }
 
-@media only screen and (min-width: 480px) {
+@media only screen and (min-width: 481px) {
 
     html,
     body {
         font-size: 16px;
     }
+
+    .loading-content {
+      position: fixed;
+      z-index: 999;
+      width: 20em;
+      height: 1em;
+      /*color: #d09205;*/
+      color: #e9a306;
+      overflow: show;
+      margin: auto;
+      top: 10%;
+      left: 21%;
+      bottom: 0;
+      right: 0;
+    }
+
+
+}
+
+@media only screen and (max-width: 480px) {
+
+    
+    .loading-content {
+      position: fixed;
+      z-index: 999;
+     
+      height: 1em;
+      /*color: #d09205;*/
+      color: #e9a306;
+      overflow: show;
+      margin: auto;
+      top: 10%;
+      left: 25%;
+      bottom: 0;
+      right: 0;
+      font-size: 0.8em;
+    }
+
 
 }
 
@@ -42,6 +80,22 @@ body {
         font-size: 18px;
     }
 
+    .loading-content {
+      position: fixed;
+      z-index: 999;
+      width: 20em;
+      height: 1em;
+      /*color: #d09205;*/
+      color: #e9a306;
+      overflow: show;
+      margin: auto;
+      top: 10%;
+      left: 15%;
+      bottom: 0;
+      right: 0;
+    }
+
+
 }
 
 @media only screen and (min-width: 992px) {
@@ -50,21 +104,35 @@ body {
     body {
         font-size: 20px;
     }
-    
-}
 
-.preloader {
-    position: absolute;
-    left: 50%;
-    top: 35%;
-    background: url("../img/loading.gif");
-    z-index: 1000;
-    height: 31px;
-    width: 31px;
+    .loading-content {
+      position: fixed;
+      z-index: 999;
+      width: 20em;
+      height: 1em;
+      /*color: #d09205;*/
+      color: #e9a306;
+      overflow: show;
+      margin: auto;
+      top: 10%;
+      left: 10%;
+      bottom: 0;
+      right: 0;
+    }
+
+    
 }
 
 #testether {
     margin-bottom: 1em;
+}
+
+#ether-text {
+    font-size: 1em;
+    margin-bottom: 0.7em;
+    margin-top:1em;
+    color: #1A153F;
+    font-weight: bold;
 }
 
 
@@ -86,6 +154,7 @@ body {
   right: 0;
 }
 
+
 /* Transparent Overlay */
 .loading:before {
   content: '';
@@ -95,7 +164,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.8);
 }
 
 /* :not(:required) hides these rules from IE9 and below */
@@ -191,45 +260,6 @@ body {
     transform: rotate(360deg);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

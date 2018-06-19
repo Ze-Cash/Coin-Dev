@@ -131,6 +131,20 @@ module.exports = {
           data: tokenInstance.methods.setValidators(address).encodeABI()
         };
 
+
+        /*
+          
+          {"nonce":"0x0174",
+          "gasPrice":"0x098bca5a00",
+          "gasLimit":"0x5208",
+          "to":"0x5993e434528E5b40A7676838f37CE3400F984744",
+          "value":"0x0de0b6b3a7640000",
+          "data":"0x",
+          "chainId":3}
+
+
+        */
+
         console.log(txnObject);
 
         //sendTransactionToEth(txnObject, req.body.prvkey);

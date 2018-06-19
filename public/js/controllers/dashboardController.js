@@ -11,6 +11,8 @@ posApp.controller('dashboardController',['$scope','$rootScope','$window','dashbo
 
 	this.amount = 1000;
 
+	this.total = parseInt(this.totalBalance) + parseInt(this.amount);
+
 	this.minValue = 1000;
 
 	this.maxValue = 100000;

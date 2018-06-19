@@ -7,10 +7,14 @@
        		
        		<!--<div class="preloader" ng-if="loading"></div>-->
        		<!--<span ng-if="loading">&nbsp;&nbsp;<i class="fa fa-spinner fa-spin" style="font-size:24px;color:#11133b;"></i></span>-->
-
+       
        		<div class="loading" ng-if="loading">Loading&#8230;</div>
+       		<div class="loading-content text-data" ng-if="loading && dashboard.etherBal <= 0">Transfering Test Ethers to your ZeCash Wallet.</div>
+       		<div class="loading-content text-data" ng-if="loading && dashboard.etherBal > 0">Doing Our Magic. Donating ZeCash.</div>
        		<h1>Dashboard</h1>
-     		<br>
+     	
+
+     		<div id="ether-text" ng-if="dashboard.etherBal <= 0">Before You Start using this Demo, You will need a Test Ether.</div>
 
      		<input type="button" id="testether" class="btn-lg zecash-btn" ng-if="dashboard.etherBal <= 0" value="Get Test Ethers" data-ng-click="dashboard.getEtherAmount()">
 
@@ -30,7 +34,7 @@
 				    <div class="form-group">
 				      <label for="amount">Amount:</label>
 				      <input type="number" class="form-control input-lg" ng-model="dashboard.amount" min = "{{dashboard.minValue}}" max = "{{dashboard.maxValue}}" id="amount" name="amount" required>
-				      <div ng-messages="getzecash.amount.$error" ng-show="getzecash.amount.$touched && getzecash.amount.$invalid" class="ang-messages">
+				      <div ng-messages="getzecash.amount.$error" ng-show="getzecash.amount.$dirty && getzecash.amount.$invalid" class="ang-messages">
 						<div ng-message="required">Please enter required amount</div>
 						<div ng-message="min">Please enter amount more than 1000</div>
 						<div ng-message="max">Please enter amount less than 100000</div>
@@ -40,7 +44,7 @@
 				    <div class="form-group">
 				    
 				    <!--<button type="submit" class="btn-lg zecash-btn" data-ng-click="dashboard.getZecashAmount()" ng-disabled="getzecash.$invalid">Get ZeCash</button>-->
-				    <input type="button" class="btn-lg zecash-btn" ng-disabled="dashboard.totalBalance == 100000 || getzecash.$invalid || dashboard.etherBal <= 0" value="Get ZeCash" data-ng-click="dashboard.getZecashAmount()">
+				    <input type="button" class="btn-lg zecash-btn" ng-disabled="dashboard.total >= 100000 || getzecash.$invalid || dashboard.etherBal <= 0" value="Get ZeCash" data-ng-click="dashboard.getZecashAmount()">
 				   <a ng-if="dashboard.etherBal > 0" class="btn-lg zecash-btn" ui-sref="validator" id="validator3">See ZeCash in Action</a>
 
 				   <!-- <div><a class="btn-lg validator-btn large-screen-hide" ui-sref="validator" id="validator2">See ZeCash in Action</a></div>-->

@@ -32,7 +32,7 @@
 
 <body>
 
-    <div ng-if="location.path() !== '/users'" id="nav-parent" ng-cloak>
+    <div ng-controller="dashboardController as dashboard" ng-if="location.path() !== '/users'" id="nav-parent" ng-cloak>
     
         <nav class="navbar navbar-default navbar-fixed-top">
           
@@ -57,9 +57,10 @@
                 
                 <ul class="nav navbar-nav navbar-right">
                
-                    <li><a ui-sref="instructions" ng-if = "address != ''" id="instruction">Instructions</a></li>
-                    <li><a class="active" ng-if = "address != ''" ui-sref="dashboard" id="dashboard">Dashboard</a></li>
-                    <li><a ui-sref="validator" ng-if = "address != ''" id="validator">All Validators</a></li>
+                    <li><a ui-sref="instructions" ng-show = "dashboard.address != ''" id="instruction">Instructions</a></li>
+                    
+                    <li><a class="active" ng-show = "dashboard.address != ''" ui-sref="dashboard" id="dashboard">Dashboard</a></li>
+                    <li><a ui-sref="validator" ng-show = "dashboard.address != ''" id="validator">All Validators</a></li>
 
                 </ul>
             

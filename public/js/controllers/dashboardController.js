@@ -49,7 +49,7 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 				main.privatekey = response.data.privateKey;
 				$sessionStorage.privatekey = response.data.privateKey;
 				main.address = response.data.identityAdd;
-				$rootScope.address = response.data.identityAdd;
+				//$rootScope.address = response.data.identityAdd;
 				main.getEtherAmount();
 				//console.log("validator",response.data);
 			},function errorCallback(response) {
@@ -57,9 +57,9 @@ posApp.controller('dashboardController',['$rootScope','$window','dashboardServic
 				console.log("some error occurred. Check the console.");
 			}).then(function() {
 				$state.go('dashboard');
-				/*setInterval(function(){
+				setInterval(function(){
 					 $window.location.reload();
-				}, 500);*/
+				}, 500);
 				
 			});
 	}

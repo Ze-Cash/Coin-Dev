@@ -28,7 +28,7 @@ posApp.controller('validatorController',['$scope','$timeout','$window','validato
 	this.prevCurrVal = ($sessionStorage.prevCurrVal !== undefined)?$sessionStorage.prevCurrVal:'';
 
 	//$scope.counter = ($sessionStorage.counter !== undefined)?$sessionStorage.counter:60;
-	$scope.counter = 60;
+	/*$scope.counter = 60;
     var mytimeout = null; // the current timeoutID
     // actual timer method, counts down every second, stops on zero
     $scope.onTimeout = function() {
@@ -62,7 +62,7 @@ posApp.controller('validatorController',['$scope','$timeout','$window','validato
         if(remaining === 0) {
             console.log('your time ran out!');
         }
-    });
+    });*/
 
 	this.showValidators = function() {
 		validatorService.showValidator().
@@ -109,10 +109,10 @@ posApp.controller('validatorController',['$scope','$timeout','$window','validato
 		then(function successCallback(response) {
 				main.currentVal = response.data.data;
 				$sessionStorage.currentVal = response.data.data;
-				if (main.currentVal !== main.prevCurrVal) {
+			/*	if (main.currentVal !== main.prevCurrVal) {
 					$scope.counter = 60;
 					$scope.startTimer();
-				}
+				}*/
 				
 				main.prevCurrVal = response.data.data;
 				$sessionStorage.prevCurrVal = response.data.data;

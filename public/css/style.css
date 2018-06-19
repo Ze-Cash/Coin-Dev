@@ -767,7 +767,7 @@ h3 {
 
 
 .success-font {
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: #4BB543;
 }
 
@@ -807,7 +807,7 @@ md-card.md-default-theme, md-card {
     }
 
     .success-font {
-     font-size: 1.2em;
+     font-size: 1em;
     }
     .currentval-font {
     font-size: 1.0em;
@@ -830,7 +830,7 @@ md-card.md-default-theme, md-card {
 
      .success-font {
 
-         font-size: 1.0em;
+         font-size: 0.8em;
       }
    
 }

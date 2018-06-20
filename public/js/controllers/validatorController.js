@@ -1,5 +1,5 @@
 //Controller for Validator
-posApp.controller('validatorController',['$rootScope','$scope','$timeout','$window','validatorService','$state','$sessionStorage', function($rootScope,$scope,$timeout,$window,validatorService,$state,$sessionStorage) {
+posApp.controller('validatorController',['$filter','$rootScope','$scope','$timeout','$window','validatorService','$state','$sessionStorage', function($filter,$rootScope,$scope,$timeout,$window,validatorService,$state,$sessionStorage) {
 
 	var main = this;
 
@@ -27,8 +27,13 @@ posApp.controller('validatorController',['$rootScope','$scope','$timeout','$wind
 
 	this.prevCurrVal = ($sessionStorage.prevCurrVal !== undefined)?$sessionStorage.prevCurrVal:'';
 
+	this.showMsg = false;
+
+	this.blockIndex = 0;
+
+	this.currentValName = ($sessionStorage.currentValName !== undefined)?$sessionStorage.currentValName:'';
 	//$scope.counter = ($sessionStorage.counter !== undefined)?$sessionStorage.counter:60;
-	/*$scope.counter = 60;
+	/*$scope.counter = 5;
     var mytimeout = null; // the current timeoutID
     // actual timer method, counts down every second, stops on zero
     $scope.onTimeout = function() {
@@ -53,7 +58,7 @@ posApp.controller('validatorController',['$rootScope','$scope','$timeout','$wind
         main.showLoader = false;
         mytimeout = null;
         $timeout.cancel(mytimeout);
-        $scope.counter = 60;
+        $scope.counter = 5;
        // $sessionStorage.counter = 60;
 
     };
@@ -69,16 +74,24 @@ posApp.controller('validatorController',['$rootScope','$scope','$timeout','$wind
 		then(function successCallback(response) {
 			main.otherValidators = [];
 			angular.forEach(response.data.data, function(value) {
-			
+			//console.log(value);
 			if (value[3] == main.address) {
 				main.totalBalance = value[0];
 				main.stakedPercent = value[1]/10;
 				main.blocksForged = value[5];
-				main.isDisabled = false;	
+				main.isDisabled = false;
+				main.blockIndex = value[6];	
 			}
 			else{
 				main.otherValidators.push(value);
+				//main.otherValidators = $filter('orderBy')(main.otherValidators, '1*6');
+				//console.log(main.otherValidators);	
 			}
+
+			/*if (main.currentVal == value[3]) {
+				main.currentValName = 'Validator ' + value[7];
+				$sessionStorage.currentValName = 'Validator ' + value[7];
+			}*/
 		});
 	},function errorCallback(response) {
 		console.log(response);
@@ -107,13 +120,21 @@ posApp.controller('validatorController',['$rootScope','$scope','$timeout','$wind
 	}
 
 	this.getValidator = function() {
+		//main.showMsg = false;
 		validatorService.getValidatorAdd().
 		then(function successCallback(response) {
 				main.currentVal = response.data.data;
 				$sessionStorage.currentVal = response.data.data;
-			/*	if (main.currentVal !== main.prevCurrVal) {
-					$scope.counter = 60;
-					$scope.startTimer();
+				main.currentValName = response.data.dataname;
+				$sessionStorage.currentValName = response.data.dataname;
+			/*if (main.currentVal == main.prevCurrVal) {
+					
+						 
+						  setTimeout(function () {
+						         main.showMsg = true;
+						    }, 10000);
+					
+					
 				}*/
 				$rootScope.address = ($sessionStorage.address !== undefined)?($sessionStorage.address):'';
 				$rootScope.enableButton = false;
@@ -126,9 +147,34 @@ posApp.controller('validatorController',['$rootScope','$scope','$timeout','$wind
 		});
 	}
 
+	/*this.validatorName = function() {
+		validatorService.showValidator().
+		then(function successCallback(response) {
+			
+			angular.forEach(response.data.data, function(value1) {
+				//console.log(value1);
+				if (main.currentVal == value1[3]) {
+					main.currentValName = 'Validator ' + value1[7];
+					$sessionStorage.currentValName = 'Validator ' + value1[7];
+				}
+
+			});
+		},function errorCallback(response) {
+			console.log(response);
+			console.log("some error occurred. Check the console.");
+		});
+	}*/
+
 	setInterval(function(){
 		  main.getValidator();
 		  main.showValidators();
+		  
 	}, 30000);
+
+	/*setInterval(function(){
+		  main.validatorName();
+		  
+	}, 60000);*/
+
 	
 }]);

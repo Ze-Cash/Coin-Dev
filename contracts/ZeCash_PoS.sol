@@ -51,7 +51,8 @@ contract ZeCash_PoS is Ownable {
     uint public stakeMinAge = 50 seconds; // minimum age for coin age: 3M
     uint public stakeMaxAge = 100 seconds; // stake age of full weight: 10M
     uint public maxMintProofOfStake = 10**17; // default 10% annual interest
-    uint256 totalStakedAmount = 0;
+    uint256 public totalStakedAmount;
+    uint256 public validatorindex;
     uint256 public totalSupply;
     uint256 public maxTotalSupply;
     uint256 public totalInitialSupply;
@@ -67,6 +68,8 @@ contract ZeCash_PoS is Ownable {
         bool defValidator;
         uint256 noBlocksForged;
         uint256[] blocks;
+        uint256 index;
+        uint256 createdTime;
     }
     
     struct transferInStruct{
@@ -121,6 +124,7 @@ contract ZeCash_PoS is Ownable {
         balances[owner] = totalInitialSupply;
         totalSupply = totalInitialSupply;
         validatorAccts = [0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006,0x323233A2052D66b247c96d3A7E63164B5Cd8afBb,0x5Ac69B00570412aD65F59404308005b4bea0Db77,0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f,0x1B2FE0836FB9306250C47143F7274ba38dD2cA07,0x8c4794FB81114A2daFe3B04eB3D4a3944752b276];
+        validatorindex = 6;
 
         Block storage genesisblock = blockchain[0];
         genesisblock.index = 0;
@@ -139,6 +143,8 @@ contract ZeCash_PoS is Ownable {
         balances[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006] = 4000;
         validator1.stakedPercent = percent(balances[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006],totalStakedAmount,3);
         validator1.noBlocksForged = 0;
+        validator1.index = 1;
+        validator1.createdTime = block.timestamp;
         transferIns[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006].push(transferInStruct(uint128(balances[0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006]),_now));
 
         Validator storage validator2 = validators[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb];
@@ -147,7 +153,9 @@ contract ZeCash_PoS is Ownable {
         validator2.earnedZecash = 0;
         validator2.addr = 0x323233A2052D66b247c96d3A7E63164B5Cd8afBb;
         validator2.noBlocksForged = 0;
+        validator2.index = 2;
         validator2.defValidator = true;
+        validator2.createdTime = block.timestamp;
         balances[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb] = 6000;
         validator2.stakedPercent = percent(balances[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb],totalStakedAmount,3);
         transferIns[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb].push(transferInStruct(uint128(balances[0x323233A2052D66b247c96d3A7E63164B5Cd8afBb]),_now));
@@ -158,7 +166,9 @@ contract ZeCash_PoS is Ownable {
         validator3.earnedZecash = 0;
         validator3.addr = 0x5Ac69B00570412aD65F59404308005b4bea0Db77;
         validator3.noBlocksForged = 0;
+        validator3.index = 3;
         validator3.defValidator = true;
+        validator3.createdTime = block.timestamp;
         balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77] = 20000;
         validator3.stakedPercent = percent(balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77],totalStakedAmount,3);
         transferIns[0x5Ac69B00570412aD65F59404308005b4bea0Db77].push(transferInStruct(uint128(balances[0x5Ac69B00570412aD65F59404308005b4bea0Db77]),_now));
@@ -170,6 +180,8 @@ contract ZeCash_PoS is Ownable {
         validator4.addr = 0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f;
         validator4.noBlocksForged = 0;
         validator4.defValidator = true;
+        validator4.index = 4;
+        validator4.createdTime = block.timestamp;
         balances[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f] = 25000;
         validator4.stakedPercent = percent(balances[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f],totalStakedAmount,3);
         transferIns[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f].push(transferInStruct(uint128(balances[0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f]),_now));
@@ -181,6 +193,8 @@ contract ZeCash_PoS is Ownable {
         validator5.addr = 0x1B2FE0836FB9306250C47143F7274ba38dD2cA07;
         validator5.noBlocksForged = 0;
         validator5.defValidator = true;
+        validator5.createdTime = block.timestamp;
+        validator5.index = 5;
         balances[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07] = 40000;
         validator5.stakedPercent = percent(balances[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07],totalStakedAmount,3);
         transferIns[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07].push(transferInStruct(uint128(balances[0x1B2FE0836FB9306250C47143F7274ba38dD2cA07]),_now));
@@ -192,6 +206,8 @@ contract ZeCash_PoS is Ownable {
         validator6.addr = 0x8c4794FB81114A2daFe3B04eB3D4a3944752b276;
         validator6.noBlocksForged = 0;
         validator6.defValidator = true;
+        validator6.index = 6;
+        validator6.createdTime = block.timestamp;
         balances[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276] = 5000;
         validator6.stakedPercent = percent(balances[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276],totalStakedAmount,3);
         transferIns[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276].push(transferInStruct(uint128(balances[0x8c4794FB81114A2daFe3B04eB3D4a3944752b276]),_now));    
@@ -370,12 +386,15 @@ contract ZeCash_PoS is Ownable {
     }
 
     function setValidators (address _address) external {
+        validatorindex = validatorindex + 1;
         Validator storage validator = validators[_address];
         // validator.stakedPercent = 0;
         validator.totalAmount = 0;
         validator.addr = _address;
         validator.defValidator = false;
         validator.noBlocksForged = 0;
+        validator.index = validatorindex;
+        validator.createdTime = block.timestamp;
         validatorAccts.push(_address);
     }
 
@@ -387,8 +406,15 @@ contract ZeCash_PoS is Ownable {
         return i;
     }
 
+    function removeValidators(address[] _alladdresses) external {
+
+        for (uint k = 0; k < _alladdresses.length; k++) {
+            remValidator(_alladdresses[k]);
+        }
+    }
+
   /** Removes the given value in an array. */
-    function removeValidator(address _address) external {
+    function remValidator(address _address) internal {
         balances[owner] = balances[owner].add(validators[_address].totalAmount);
         totalStakedAmount = totalStakedAmount.sub(validators[_address].totalAmount);
         for (uint j = 0; j < validatorAccts.length; j++) {
@@ -416,9 +442,14 @@ contract ZeCash_PoS is Ownable {
         return validatorAccts;
     }
 
-    function getValidator (address ins) view external returns (uint256,uint256,uint256, address, bool, uint256, uint256[]) {
+    function getValidator (address ins) view external returns (uint256,uint256,uint256, address, bool, uint256,uint) {
        
-        return (validators[ins].totalAmount,validators[ins].stakedPercent,validators[ins].earnedZecash, validators[ins].addr, validators[ins].defValidator,validators[ins].noBlocksForged, validators[ins].blocks);
+        return (validators[ins].totalAmount,validators[ins].stakedPercent,validators[ins].earnedZecash, validators[ins].addr, validators[ins].defValidator,validators[ins].noBlocksForged, validators[ins].createdTime);
+    }
+
+    function getValidatorForIndex (address ins) view external returns (uint256,uint256,uint256, address, bool, uint256, uint256) {
+       
+        return (validators[ins].totalAmount,validators[ins].stakedPercent,validators[ins].earnedZecash, validators[ins].addr, validators[ins].defValidator,validators[ins].noBlocksForged, validators[ins].index);
     }
 
     function countValidators() view external returns (uint) {

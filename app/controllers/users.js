@@ -30,12 +30,15 @@ module.exports.userControllerFunction = function(app) {
 
   userRouter.get('/getCurrentValidator', (req, res) => {
     console.log("**** GET /getCurrentValidator ****");
-    /*truffle_connect.getValidator(randValidator,function (answer1) {
+    if (randValidator){
+    truffle_connect.getValidatorForIndex(randValidator,function (answer22) {
                
-          console.log("answer1",answer1);
-            res.send(answer1);
-    });*/
-    res.send({data: randValidator})
+          //console.log("answer1",answer1);
+          //res.send(answer22);
+           res.send({data: answer22[3], dataname: answer22[6]})
+    });
+  }
+   
   });
 
 //Request to set the spender account in case needed
@@ -117,7 +120,7 @@ module.exports.userControllerFunction = function(app) {
   });
 
 //done
-   userRouter.post('/removeValidator', (req, res) => {
+   userRouter.post('/removeValidators', (req, res) => {
     
     console.log("**** GET /removeValidator ****");
     
@@ -126,13 +129,88 @@ module.exports.userControllerFunction = function(app) {
 
     key = privkeys();
     console.log("key is ",key);
+    var delValidators = [];
+    var timeDiff;
+    truffle_connect.getAllValidators(function (answer20) {
+        
+        let deladdresses = answer20;
+        console.log("deladdresses",deladdresses);
+         async.forEach(deladdresses, function (addr1, callback) {
 
-    let address = req.body.address;
-    truffle_connect.removeValidator(address,sender,key,function (answer) {
-      res.send(address);
-    });
+         truffle_connect.getValidator(addr1,function (answer20) {
+          console.log("Now time is ", (Date.now()/1000).toFixed(0));
+         // console.log(answer20[6]);
+              timeDiff = (Date.now()/1000).toFixed(0) - answer20[6];
+              //console.log(timeDiff);
+              if(answer20[4] == false && timeDiff >= 600) {
+
+                  delValidators.push(answer20[3]);
+                  
+              }
+               
+               //console.log("answer1",answer1);
+                callback();
+              });
+                // tell async that that particular element of the iterator is done
+            }, function (err) {
+              console.log("delValidators",delValidators);
+                truffle_connect.removeValidators(delValidators,sender,key,function (answer) {
+                    console.log("Validators Deleted");
+                });
+               
+               res.send({data:delValidators});
+        });
+  
+     });
 
   });
+
+  function deleteValidator() {
+      request.get('/removeValidators', (err, res) => {
+
+          console.log("**** GET /removeValidator ****");
+    
+    sender = next();
+    console.log("sender is", sender);
+
+    key = privkeys();
+    console.log("key is ",key);
+    var delValidators = [];
+    var timeDiff;
+    truffle_connect.getAllValidators(function (answer20) {
+        
+        let deladdresses = answer20;
+        console.log("deladdresses",deladdresses);
+         async.forEach(deladdresses, function (addr1, callback) {
+
+         truffle_connect.getValidator(addr1,function (answer20) {
+          console.log("Now time is ", (Date.now()/1000).toFixed(0));
+         // console.log(answer20[6]);
+              timeDiff = (Date.now()/1000).toFixed(0) - answer20[6];
+              //console.log(timeDiff);
+              if(answer20[4] == false && timeDiff >= 600) {
+
+                  delValidators.push(answer20[3]);
+                  
+              }
+               
+               //console.log("answer1",answer1);
+                callback();
+              });
+                // tell async that that particular element of the iterator is done
+            }, function (err) {
+              console.log("delValidators",delValidators);
+                truffle_connect.removeValidators(delValidators,sender,key,function (answer) {
+                    console.log("Validators Deleted");
+                });
+               
+               console.log({data:delValidators});
+        });
+  
+     });
+
+      });
+   }
 
    
 
@@ -151,21 +229,21 @@ module.exports.userControllerFunction = function(app) {
   userRouter.get('/showAllValidators', (req,res) => {
 
     var arrayOfValidators = [];
+   //var valindex = 0;
     console.log("**** GET /showAllValidators ****");
     
      truffle_connect.getAllValidators(function (answer) {
        
         let addresses = answer;
-       // console.log(addresses);
-       //var index = 0;
-
+       
         async.forEach(addresses, function (addr, callback) {
-             // index++;
-               truffle_connect.getValidator(addr,function (answer1) {
-               console.log("answer1",answer1);
-              // answer1[7] = index;
+            
+               truffle_connect.getValidatorForIndex(addr,function (answer1) {
+               // console.log("addr",addr);
+             //  valindex = valindex + 1;
+              //  answer1["7"] = valindex;
                 arrayOfValidators.push(answer1);
-               // console.log(answer1);
+               //console.log("answer1",answer1);
                 callback();
               });
                 // tell async that that particular element of the iterator is done
@@ -190,6 +268,20 @@ module.exports.userControllerFunction = function(app) {
         });
   
   });
+
+  userRouter.post('/getValidatorForIndex', (req,res) => {
+
+    console.log("**** GET /getValidatorForIndex ****");
+        
+        let addr = req.body.address;
+        truffle_connect.getValidatorForIndex(addr,function (answer23) {
+          
+          res.send(answer23);
+          
+        });
+  
+  });
+
 
   userRouter.get('/getBlockChain', (req,res) => {
 
@@ -296,7 +388,7 @@ module.exports.userControllerFunction = function(app) {
              
            }, function (err) {
                randValidator = eligibleValidators[Math.floor(Math.random() * eligibleValidators.length)];
-               truffle_connect.getValidator(randValidator,function (answer2) {
+               truffle_connect.getValidatorForIndex(randValidator,function (answer2) {
                   var selectedValidator1 = answer2;
                  // console.log('selectedValidator1',answer2);
                   console.log("sel[4]",selectedValidator1[4]);
@@ -391,11 +483,26 @@ module.exports.userControllerFunction = function(app) {
   
 }
 
+/*function removeValidators() {
+
+}*/
+
 //Pick Winner Api will be coming under this
  cron.schedule('* * * * *', function(){
      console.log('running a task every minute');
+     getCron();
+  });
+
+  /*cron.schedule('* * * * *', function(){
+     console.log('running a task every minute');
      
-    getCron();
+    deleteValidator();
+  });*/
+
+ cron.schedule('0 0 */2 * * *', function(){
+    console.log('running a task every 2 hours');
+    deleteValidator();
+    //getCron();
   });
 
 

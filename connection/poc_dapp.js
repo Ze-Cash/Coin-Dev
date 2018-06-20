@@ -131,20 +131,6 @@ module.exports = {
           data: tokenInstance.methods.setValidators(address).encodeABI()
         };
 
-
-        /*
-          
-          {"nonce":"0x0174",
-          "gasPrice":"0x098bca5a00",
-          "gasLimit":"0x5208",
-          "to":"0x5993e434528E5b40A7676838f37CE3400F984744",
-          "value":"0x0de0b6b3a7640000",
-          "data":"0x",
-          "chainId":3}
-
-
-        */
-
         console.log(txnObject);
 
         //sendTransactionToEth(txnObject, req.body.prvkey);
@@ -214,6 +200,79 @@ module.exports = {
       callback("ERROR 404");
     }); */
 
+  },
+
+  removeValidators: function(addresses,sender,key,callback) {
+      var self = this;
+
+    var config = require('../config/config');
+    var Web3 = require('web3');
+    
+    var web3 = new Web3(config.clientEndPoint);
+   
+    var contractAddr = config.contractAddress;
+
+    var tokenInstance = new web3.eth.Contract(zecash_artifact.abi, contractAddr, {
+      from: sender
+    });
+
+    var txnNonce;
+    var txnObject;
+    
+      web3.eth.getTransactionCount(sender,'pending')
+      .then(function(data){
+        txnNonce = data;
+        console.log(txnNonce);
+        txnObject = {
+          from : sender,
+          to : contractAddr,
+          value : "0x0",
+          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'Gwei')),
+          gas: web3.utils.toHex('3000000'),
+          nonce: web3.utils.toHex(txnNonce),
+          data: tokenInstance.methods.removeValidators(addresses).encodeABI()
+        };
+
+        console.log(txnObject);
+
+        var Tx = require('ethereumjs-tx');
+        var privateKey = new Buffer(key, 'hex');
+
+        var tx = new Tx(txnObject);
+        tx.sign(privateKey);
+
+        var serializedTx = tx.serialize();
+        console.log(serializedTx);
+
+        web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+          .on('receipt', function(receipt){
+            console.log("Receipt Called");
+            callback(receipt.valueOf());
+          
+          }).on('error', function(err){
+            console.log("Error Called: "+ err);
+
+            var minedPending = "Be aware that it might still be mined";
+            var sourceErr = " " + err + " ";
+            if(sourceErr.indexOf(minedPending) !== -1)
+            {
+              var rtnObj = {
+                "status" : "pending",
+                "data" : err,
+                "errmsg" : "Your transaction is on the Blockchain. Depending on data traffic, it may take anywhere between 5-30 minutes to execute. Kindly check your wallet again in some time to be sure that the transaction was successfully executed."
+                };
+
+              callback(rtnObj.valueOf());  
+            }
+            else
+            {
+              
+              callback("ERROR 404");
+              
+            }
+          });
+            
+          });
   },
 
   removeValidator: function (address, sender,key, callback) {
@@ -290,6 +349,26 @@ module.exports = {
 
   },
 
+  getValidatorForIndex: function(address,callback) {
+    var self = this;
+
+    var config = require('../config/config');
+    var Web3 = require('web3');
+    var web3 = new Web3(config.clientEndPoint);
+
+    var contractInstance = new web3.eth.Contract(zecash_artifact.abi, config.contractAddress);
+
+    var number = contractInstance.methods.getValidatorForIndex(address).call()
+    .then(function(data){
+      //console.log("data is ",data.valueOf());
+      callback(data.valueOf());
+    })
+    .catch(function(e) {
+      console.log(e);
+      callback("ERROR 404");
+    });
+  },
+
   getValidator: function(address,callback) {
   	var self = this;
 
@@ -301,6 +380,7 @@ module.exports = {
 
     var number = contractInstance.methods.getValidator(address).call()
     .then(function(data){
+      console.log("data is ",data.valueOf());
       callback(data.valueOf());
     })
     .catch(function(e) {

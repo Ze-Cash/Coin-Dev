@@ -26,6 +26,10 @@ body {
     visibility: hidden;
 }
 
+.spinnercontent {
+    color: #d09205;
+}
+
 @media only screen and (min-width: 481px) {
 
     html,
@@ -270,7 +274,7 @@ body {
 
 .btn-lg {
     border: 1px solid #d09205;
-    background-color: #d09205;
+    background-color: #d09205;;
     color: #fff;
     padding: 10px 18px;
     border-radius: 2px;
@@ -282,7 +286,7 @@ body {
 
 .btn-lg[disabled] {
     cursor: default;
-    opacity: .5;
+    opacity: .15;
 }
 
 input[type="button"]
@@ -707,6 +711,20 @@ h3 {
     font-weight: bold;
 }
 
+.titled {
+    font-size: 1em;
+    width: 3em;
+}
+
+.fa.fa-spinner.fa-spin {
+    font-size:2em;
+    color:#11133b;
+}
+
+.spinnerimg {
+    margin-left: 17em;
+}
+
 .zecash-btn {
     font-size: 1em;
 }
@@ -802,7 +820,7 @@ h3 {
 }
 
 .currentval-font {
-    font-size: 1.0em;
+    font-size: 1.2em;
 }
 
 .you-font {

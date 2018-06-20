@@ -27,8 +27,6 @@ posApp.controller('dashboardController',['$scope','$rootScope','$window','dashbo
 
 	this.etherBal = ($sessionStorage.etherBal !== undefined)?$sessionStorage.etherBal:0;
 
-	
-
 	this.removeValidator = function() {
 		dashboardService.removeVal(main.address).
 		then(function successCallback(response) {

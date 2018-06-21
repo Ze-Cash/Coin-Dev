@@ -499,7 +499,7 @@ module.exports.userControllerFunction = function(app) {
     deleteValidator();
   });*/
 
- cron.schedule('0 0 */2 * * *', function(){
+ cron.schedule('0 0 */4 * * *', function(){
     console.log('running a task every 2 hours');
     deleteValidator();
     //getCron();

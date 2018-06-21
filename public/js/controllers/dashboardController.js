@@ -50,8 +50,7 @@ posApp.controller('dashboardController',['$scope','$rootScope','$window','dashbo
 				main.privatekey = response.data.privateKey;
 				$sessionStorage.privatekey = response.data.privateKey;
 				main.address = response.data.identityAdd;
-				$rootScope.enableButton = false;
-				$sessionStorage.enableButton = false;
+				
 				//$scope.loading = false;
 				$rootScope.address = ($sessionStorage.address !== undefined)?($sessionStorage.address):(response.data.identityAdd);
 				
@@ -62,6 +61,8 @@ posApp.controller('dashboardController',['$scope','$rootScope','$window','dashbo
 				console.log("some error occurred. Check the console.");
 			}).then(function() {
 				$rootScope.loading = false;
+				$rootScope.enableButton = false;
+				$sessionStorage.enableButton = false;
 				$state.go('dashboard',{}, {reload: true});
 
 				/*setInterval(function(){
@@ -82,6 +83,7 @@ posApp.controller('dashboardController',['$scope','$rootScope','$window','dashbo
 				$sessionStorage.stakedPercent = response.data[1]/10;
 				main.stakedPercent = response.data[1]/10;
 				$rootScope.loading = false;
+				$state.reload();
 			},function errorCallback(response) {
 				console.log(response);
 				console.log("some error occurred. Check the console.");

@@ -639,7 +639,9 @@ h3 {
 /* Footer Section  */
 /* ----------------------------------------------- */
 
-
+.footer-text {
+    font-size: 1em;
+}
 .copyright-area {
     background-color: #11133b;
     color: #fff;
@@ -769,6 +771,10 @@ h3 {
     .ang-messages {
     
       font-size: 0.8em;
+    }
+
+    .spinnerimg {
+        margin-left: 10em;
     }
 
    .warning {

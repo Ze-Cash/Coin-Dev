@@ -6,6 +6,7 @@ posApp.run(function($rootScope, $location,$http,$localStorage) {
     $rootScope.location = $location;
 
      $rootScope.loading = false;
+     $rootScope.loading1 = false;
      $rootScope.enableButton = true;
      $rootScope.address = '';
     /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {

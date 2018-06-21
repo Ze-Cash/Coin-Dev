@@ -56,8 +56,7 @@ contract ZeCash_PoS is Ownable {
     uint256 public totalSupply;
     uint256 public maxTotalSupply;
     uint256 public totalInitialSupply;
-    address public etherOwner = 0x5993e434528E5b40A7676838f37CE3400F984744;
-    
+   
     /*** Structs ***************/
     
     struct Validator {
@@ -115,13 +114,13 @@ contract ZeCash_PoS is Ownable {
 
     constructor() public {
         
-        maxTotalSupply = 10 * 10**26; // 500 Mil.
-        totalInitialSupply = 10**26; // 1 Mil.
+        maxTotalSupply = 20 * 10**26; // 2 Billion.
+        totalInitialSupply = 5 * 10**26; // 500 Mil.
         totalStakedAmount = 100000;
         chainStartTime = block.timestamp;
         chainStartBlockNumber = block.number;
         uint64 _now = uint64(block.timestamp);
-        balances[owner] = totalInitialSupply;
+        balances[owner] = 499900000 * 10**18;
         totalSupply = totalInitialSupply;
         validatorAccts = [0x8547375670f0dB79e59C832b2dcAeB0DdE2F6006,0x323233A2052D66b247c96d3A7E63164B5Cd8afBb,0x5Ac69B00570412aD65F59404308005b4bea0Db77,0xBD5DbFFe75274258bC9D0d907f957A2d0774D60f,0x1B2FE0836FB9306250C47143F7274ba38dD2cA07,0x8c4794FB81114A2daFe3B04eB3D4a3944752b276];
         validatorindex = 6;
@@ -257,12 +256,6 @@ contract ZeCash_PoS is Ownable {
         return true;
     }
 
-    function getTestEther(address _to) external returns (bool) {
-        if (balancesInEth[etherOwner] < 1) return false;
-        balancesInEth[etherOwner] = balancesInEth[etherOwner].sub(1);
-        balancesInEth[_to] = balancesInEth[_to].add(1);
-        return true;
-    }
     
     function balanceOf(address _owner) external view returns (uint256 balance) {
         return balances[_owner];

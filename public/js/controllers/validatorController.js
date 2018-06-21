@@ -14,6 +14,7 @@ posApp.controller('validatorController',['$filter','$rootScope','$scope','$timeo
 	this.blocksForged = ($sessionStorage.blocksForged !== undefined)?$sessionStorage.blocksForged:0;
 
 	this.errormsg = '';
+	
 
 	this.isUpdated=false;
 	
@@ -101,7 +102,7 @@ posApp.controller('validatorController',['$filter','$rootScope','$scope','$timeo
 
 	this.forgeBlock = function() {
 		main.isDisabled = true;
-		$rootScope.loading = true;
+		$rootScope.loading1 = true;
 		validatorService.forge(main.address,main.privatekey).
 		then(function successCallback(response) {
 				main.isVisible=false;
@@ -111,7 +112,7 @@ posApp.controller('validatorController',['$filter','$rootScope','$scope','$timeo
 				main.isDisabled = false;
 				main.isUpdated = true;
 				setTimeout(function(){main.isUpdated = false; }, 10000);
-				$rootScope.loading = false;
+				$rootScope.loading1 = false;
 				//main.isDisabled = false;
 			},function errorCallback(response) {
 				console.log(response);

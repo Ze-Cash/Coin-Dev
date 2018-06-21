@@ -188,7 +188,7 @@ module.exports.userControllerFunction = function(app) {
          // console.log(answer20[6]);
               timeDiff = (Date.now()/1000).toFixed(0) - answer20[6];
               //console.log(timeDiff);
-              if(answer20[4] == false && timeDiff >= 600) {
+              if(answer20[4] == false && timeDiff >= 3600) {
 
                   delValidators.push(answer20[3]);
                   
